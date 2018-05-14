@@ -1,4 +1,4 @@
 <identifier> --> <letter> <string> ;
-<string> --> <letter> <string> | <digit> <string> | ;
+<string> --> <letter> <string> | <digit> <string> |  ;
 <letter> --> 'A'..'Z' ;
 <digit> --> '0'..'9' ;

@@ -12,7 +12,10 @@ object GrammarGen {
     fun initGrammar(file: File) {
         map.clear()
         FileReader(file).forEachLine(::parse)
+        map.forEach { _, ruleSet ->  ruleSet.computeFirst() }
     }
+
+    operator fun get(name: String) = map[name]!!
 
     private fun parse(line: String) {
         if (line.endsWith(";")) {
@@ -26,7 +29,7 @@ object GrammarGen {
         val parts = rule.split("-->").map(String::trim)
         rule = StringBuilder()
         val name = parts[0]
-        map[name] = RuleSet(name, parts[1].split("|").map(String::trim).filter(String::isNotEmpty))
+        map[name] = RuleSet(name, parts[1].split("|").map(String::trim))
     }
 
     fun print() {

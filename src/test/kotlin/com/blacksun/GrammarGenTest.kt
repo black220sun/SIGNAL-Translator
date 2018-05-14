@@ -8,9 +8,10 @@ import java.io.PrintStream
 import kotlin.test.assertEquals
 
 class GrammarGenTest {
+    private val grammarFile = "grammar_test"
     @Test
     fun testInitGrammar() {
-        val grammarFile = File("grammar")
+        val grammarFile = File(grammarFile)
         GrammarGen.initGrammar(grammarFile)
         val testFile = File.createTempFile("test", ".tmp")
         val stream = PrintStream(testFile)
@@ -22,5 +23,17 @@ class GrammarGenTest {
         val result = FileReader(testFile).readLines()
 
         assertEquals(expected, result)
+    }
+
+    @Test
+    fun testComputeFirst() {
+        GrammarGen.initGrammar(grammarFile)
+
+        val expected = GrammarGen["<letter>"].computeFirst() + GrammarGen["<digit>"].computeFirst()
+        val result = GrammarGen["<string>"].computeFirst()
+
+        assertEquals(expected, result)
+        assert(GrammarGen["<string>"].isEmpty())
+        assert(!GrammarGen["<letter>"].isEmpty())
     }
 }

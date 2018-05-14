@@ -6,4 +6,3 @@ fun main(args: Array<String>) {
     GrammarGen.initGrammar("grammar")
     GrammarGen.print()
 }
-

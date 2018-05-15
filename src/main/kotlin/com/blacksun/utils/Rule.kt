@@ -1,8 +1,8 @@
 package com.blacksun.utils
 
-class Rule(rule: String) {
+class Rule(private val name: String, private val type: String, rule: String) {
     private val parts = ArrayList<RulePart>()
-    private lateinit var first: ArrayList<Int>
+    val first by lazy { parts[0].computeFirst() }
     private val empty: Boolean
 
     init {
@@ -24,8 +24,9 @@ class Rule(rule: String) {
             part.print()
     }
 
-    fun computeFirst(): ArrayList<Int> {
-        first = parts[0].computeFirst()
-        return first
+    fun parse(): Node {
+        val node = Node(rule=name)
+        parts.forEach { node += it.parse() }
+        return node
     }
 }

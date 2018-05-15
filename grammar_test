@@ -1,4 +1,5 @@
-<identifier> --> <letter> <string> ;
-<string> --> <letter> <string> | <digit> <string> |  ;
-<letter> --> 'A'..'Z' ;
-<digit> --> '0'..'9' ;
+lexer <identifier> --> <letter> <string> ;
+part <string> --> <letter> <string> | <digit> <string> |  ;
+part <letter> --> 'A'..'Z' ;
+part <digit> --> '0'..'9' ;
+skip <ws> --> 9 | 10 | 11 | 13 | 32 ;

@@ -6,7 +6,8 @@ class RuleSet(rule: String, parts: List<String>) {
     private val rules = ArrayList<Rule>()
     private val empty: Boolean
     private val name: String
-    private val type: String
+    val type: String
+    val first by lazy(::computeFirst)
 
     init {
         val nameParts = rule.split(' ', '\t').map(String::trim).filter(String::isNotEmpty)
@@ -24,7 +25,7 @@ class RuleSet(rule: String, parts: List<String>) {
 
     fun isEmpty() = empty
 
-    fun computeFirst(): ArrayList<Int> {
+    private fun computeFirst(): ArrayList<Int> {
         val first = ArrayList<Int>()
         rules.forEach { first += it.first }
         return first

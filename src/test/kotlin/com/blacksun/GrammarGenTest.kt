@@ -29,11 +29,11 @@ class GrammarGenTest {
     fun testComputeFirst() {
         GrammarGen.initGrammar(grammarFile)
 
-        val expected = GrammarGen["<letter>"].computeFirst() + GrammarGen["<digit>"].computeFirst()
-        val result = GrammarGen["<string>"].computeFirst()
+        val expected = GrammarGen["letter"].first + GrammarGen["digit"].first
+        val result = GrammarGen["string"].first
 
         assertEquals(expected, result)
-        assert(GrammarGen["<string>"].isEmpty())
-        assert(!GrammarGen["<letter>"].isEmpty())
+        assert(GrammarGen["string"].isEmpty())
+        assert(!GrammarGen["letter"].isEmpty())
     }
 }

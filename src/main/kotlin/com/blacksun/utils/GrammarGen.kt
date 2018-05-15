@@ -8,13 +8,15 @@ object GrammarGen {
     private val map = LinkedHashMap<String, RuleSet>()
     private var rule = StringBuilder()
     private lateinit var first: String
+    val lexerRules by lazy { map.map { (_, r) -> r }.filter { it.type == "lexer" } }
 
     fun initGrammar(path: String) = initGrammar(File(path))
 
     fun initGrammar(file: File) {
+        Lexer.initGrammar(file)
         map.clear()
         FileReader(file).forEachLine(::parseLine)
-        map.forEach { _, ruleSet ->  ruleSet.computeFirst() }
+        map.forEach { _, ruleSet ->  ruleSet.first }
     }
 
     fun parse(file: File): Node {

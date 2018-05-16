@@ -1,7 +1,4 @@
-lexer <identifier> --> letter string ;
-lexer <unsigned-integer> --> digit digit-string ;
-part digit-string --> digit digit-string |  ;
-part string --> letter string | digit string |  ;
-part letter --> 'A'..'Z' ;
-part digit --> '0'..'9' ;
-skip <ws> --> 9 | 10 | 11 | 13 | 32 ;
+<identifier> --> LETTER STRING ;
+LETTER --> 'A'..'Z' ;
+STRING --> LETTER STRING | ;
+skip --> 9 | 10 | 11 | 13 | 32;

@@ -1,6 +1,6 @@
 package com.blacksun.utils.rule
 
-abstract class Rule(protected val name: String) {
+abstract class Rule(val name: String) {
     val first by lazy { computeFirst() }
     abstract val parse: () -> Any
     protected abstract val computeFirst: () -> List<Int>
@@ -12,7 +12,7 @@ abstract class Rule(protected val name: String) {
                 name.matches("\\d+") -> LexerRule(name.toInt())
                 name.matches("'.'\\.\\.'.'") -> LexerRangeRule(name.split("..").map { it[1].toInt() })
                 name.matches("\\d+\\.\\.\\d+") -> LexerRangeRule(name.split("..").map(String::toInt))
-                name.matches("[-A-Z]+") -> PartRule(name)
+                name.matches("<[-a-zA-Z]+>") -> PartRule(name)
                 name.isEmpty() -> EmptyRule()
                 else -> TODO()
             }

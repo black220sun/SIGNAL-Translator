@@ -1,6 +1,6 @@
 package com.blacksun.utils
 
-class Node(private val value: Any) {
+class Node(val value: Any = "") {
     private val children = ArrayList<Node>()
     operator fun plusAssign(node: Node) = children.plusAssign(node)
     fun print(depth: Int = 0) {

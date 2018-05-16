@@ -1,2 +1,2 @@
 ABC
-ABCD
+A1B00cd

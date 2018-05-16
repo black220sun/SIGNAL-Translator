@@ -1,4 +1,6 @@
-<identifier> --> LETTER STRING ;
-LETTER --> 'A'..'Z' ;
-STRING --> LETTER STRING | ;
+<program-identifier> --> <identifier>;
+lexer <identifier> --> <letter> <string>;
+part <letter> --> 'A'..'Z' | 'a'..'z';
+part <string> --> <letter> <string> | <digit> <string> | ;
+part <digit> --> '0'..'9';
 skip --> 9 | 10 | 11 | 13 | 32;

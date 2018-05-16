@@ -1,6 +1,7 @@
 package com.blacksun.lexer
 
 import com.blacksun.utils.GrammarGen
+import com.blacksun.utils.Node
 import com.blacksun.utils.Token
 import java.io.File
 import java.io.FileReader
@@ -12,6 +13,7 @@ object Lexer {
     private lateinit var reader: FileReader
     private var noRead = false
     private var token: Token? = null
+    private var node: Node? = null
 
     fun init(path: String) = init(File(path))
 
@@ -54,6 +56,23 @@ object Lexer {
     fun getToken(): Token {
         val tmp = token ?: error("")
         token = null
+        return tmp
+    }
+
+    fun createTokenNode(): Node {
+        read()
+        GrammarGen.lexerRules.forEach {
+            if (char in it.first) {
+                node = it.parse()
+                return node!!
+            }
+        }
+        error("")
+    }
+
+    fun getTokenNode(): Node? {
+        val tmp = node
+        node = null
         return tmp
     }
 }

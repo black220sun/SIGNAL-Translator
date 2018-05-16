@@ -67,7 +67,7 @@ object Lexer {
                 return node!!
             }
         }
-        error("")
+        return Node("error")
     }
 
     fun getTokenNode(): Node? {

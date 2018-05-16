@@ -6,7 +6,9 @@ import com.blacksun.utils.Node
 class RuleSet(private val name: String, val type: String, parts: String) {
     private val rules = ArrayList<RuleAlternative>()
     val first by lazy(::computeFirst)
+    val names by lazy(::computeNames)
     val parse: () -> Node
+    val empty by lazy { rules.any { it.empty } }
 
     init {
         when (type) {
@@ -40,7 +42,7 @@ class RuleSet(private val name: String, val type: String, parts: String) {
                 val node = Node(name)
                 for (rule in rules)
                     if (rule.check(token)) {
-                        node += rule.parse() as ArrayList<Node>
+                        node += rule.parse()
                         break
                     }
                 node
@@ -55,6 +57,13 @@ class RuleSet(private val name: String, val type: String, parts: String) {
         for (rule in rules)
             first += rule.first
         return first
+    }
+
+    private fun computeNames(): ArrayList<String> {
+        val names = ArrayList<String>()
+        for (rule in rules)
+            names += rule.names
+        return names
     }
 
     override fun toString() = "$name --> " + rules.joinToString(" | ") + ';'

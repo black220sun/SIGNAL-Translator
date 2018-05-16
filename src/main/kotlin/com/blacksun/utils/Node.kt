@@ -12,7 +12,7 @@ class Node(val value: Any = "") {
             child.print(newDepth)
     }
 
-    operator fun plusAssign(nodes: ArrayList<Node>) = children.plusAssign(nodes)
+    operator fun plusAssign(nodes: List<Node>) = children.plusAssign(nodes)
 
     override fun toString() = "Node($value)"
 }

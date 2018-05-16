@@ -5,7 +5,7 @@ import java.io.File
 import java.io.FileReader
 
 object GrammarGen {
-    private val map = HashMap<String, RuleSet>()
+    private val map = LinkedHashMap<String, RuleSet>()
     operator fun get(name: String) = map[name]!!
     private var rule = StringBuilder()
     lateinit var first: RuleSet

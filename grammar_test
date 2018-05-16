@@ -1,5 +1,11 @@
-<program-identifier> --> <identifier>;
+<program> --> <program-identifiers> <digits> <tail>;
+<tail> --> <program> | <empty>;
+<empty> --> ;
+<digits> --> <unsigned-integer> <unsigned-integer>;
+<program-identifiers> --> <identifier> <identifier>;
 lexer <identifier> --> <letter> <string>;
+lexer <unsigned-integer> --> <digit> <digit-string>;
+part <digit-string> --> <digit> <digit-string> | ;
 part <letter> --> 'A'..'Z' | 'a'..'z';
 part <string> --> <letter> <string> | <digit> <string> | ;
 part <digit> --> '0'..'9';

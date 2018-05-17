@@ -1,1 +1,3 @@
-IF a THEN b
+PROGRAM test;
+BEGIN
+END.

@@ -1,0 +1,15 @@
+<program> --> PROGRAM <procedure-identifier> <semi> <block> <dot>;
+<block> --> BEGIN <statements-list> END;
+<declarations> --> <empty>;
+<statements-list> --> <empty>;
+<procedure-identifier> --> <identifier>;
+<empty> --> ;
+lexer <semi> --> ';';
+lexer <dot> --> '.';
+lexer <identifier> --> <letter> <string>;
+lexer <unsigned-integer> --> <digit> <digit-string>;
+part <digit-string> --> <digit> <digit-string> | ;
+part <letter> --> 'A'..'Z' | 'a'..'z';
+part <string> --> <letter> <string> | <digit> <string> | ;
+part <digit> --> '0'..'9';
+skip --> 9 | 10 | 11 | 13 | 32;

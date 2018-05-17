@@ -4,7 +4,7 @@ import com.blacksun.lexer.Lexer
 import com.blacksun.utils.GrammarGen
 
 fun main(args: Array<String>) {
-    GrammarGen.initGrammar("grammar_test")
+    GrammarGen.initGrammar("grammar.gr")
     Lexer.init("res/test.sig")
-    GrammarGen["<if-stmt>"].parse().print()
+    GrammarGen.first.parse().print()
 }

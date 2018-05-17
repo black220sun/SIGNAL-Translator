@@ -17,7 +17,7 @@ abstract class Rule(private val name: String) {
                 name.matches("\\d+") -> LexerRule(name.toInt())
                 name.matches("'.'\\.\\.'.'") -> LexerRangeRule(name.split("..").map { it[1].toInt() })
                 name.matches("\\d+\\.\\.\\d+") -> LexerRangeRule(name.split("..").map(String::toInt))
-                name.matches("<[-a-zA-Z]+>") -> PartRule(name)
+                name.matches("<[-a-zA-Z?0-9]+>") -> PartRule(name)
                 name.isEmpty() -> EmptyRule()
                 else -> KeywordRule(name)
             }

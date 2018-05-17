@@ -13,8 +13,10 @@ class KeywordRule(name: String) : Rule(name) {
         val token = tokenNode.token
         if (token.name == name)
             Node(token)
-        else
-            error("")
+        else {
+            Lexer.error()
+            Node()
+        }
     }
     override val computeFirst = { emptyList<Int>() }
     override val computeNames = { arrayListOf(name) }

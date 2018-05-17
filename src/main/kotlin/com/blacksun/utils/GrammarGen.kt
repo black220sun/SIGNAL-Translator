@@ -1,5 +1,6 @@
 package com.blacksun.utils
 
+import com.blacksun.lexer.Lexer
 import com.blacksun.utils.rule.RuleSet
 import java.io.File
 import java.io.FileReader
@@ -41,4 +42,9 @@ object GrammarGen {
     }
 
     fun print() = map.forEach { _, r -> println(r) }
+    fun parse(path: String) = parse(File(path))
+    fun parse(file: File): Node {
+        Lexer.init(file)
+        return first.parse()
+    }
 }

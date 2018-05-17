@@ -1,6 +1,6 @@
 package com.blacksun.utils
 
-private const val defaultValue = ""
+private const val defaultValue = "error"
 
 class Node(val value: Any = defaultValue) {
     private val children = ArrayList<Node>()

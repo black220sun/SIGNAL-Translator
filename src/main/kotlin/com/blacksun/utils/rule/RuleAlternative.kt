@@ -12,11 +12,7 @@ class RuleAlternative(rule: String) {
         for (part in rule.split(' ', '\t'))
             rules += Rule[part.trim()]
     }
-    fun parse(): List<Node> =
-            if (empty) {
-                arrayListOf(rules[0].parse())
-            } else
-                rules.map { it.parse() }
+    fun parse(): List<Node> = rules.map { it.parse() }
     fun check(char: Int) = empty || char in first
     fun check(node: Node) = empty || node.value in names || node.token.name in names
     override fun toString() = rules.joinToString(" ")

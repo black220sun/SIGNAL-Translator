@@ -1,5 +1,5 @@
-<program> --> PROGRAM <procedure-identifier> <semi> <block> <dot>;
-<block> --> BEGIN <statements-list> END;
+<program> --> PROGRAM <procedure-identifier> ; <block> .;
+<block> --> <declarations> BEGIN <statements-list> END;
 <declarations> --> <empty>;
 <statements-list> --> <empty>;
 <procedure-identifier> --> <identifier>;

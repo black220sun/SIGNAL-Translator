@@ -19,7 +19,7 @@ abstract class Rule(private val name: String) {
                 name.matches("\\d+\\.\\.\\d+") -> LexerRangeRule(name.split("..").map(String::toInt))
                 name.matches("<[-a-zA-Z]+>") -> PartRule(name)
                 name.isEmpty() -> EmptyRule()
-                else -> TODO()
+                else -> KeywordRule(name)
             }
         private fun String.matches(regex: String): Boolean = matches(Regex(regex))
     }

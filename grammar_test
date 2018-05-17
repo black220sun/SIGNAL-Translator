@@ -16,3 +16,4 @@ part <colon-tail> --> '=' | ;
 <id-with-delimiter> --> <delimiters> <identifier> <id-with-delimiter> | <empty>;
 <delimiters> --> <delimiter> <delimiter-list>;
 <delimiter-list> --> <delimiter> <delimiter-list> | <empty>;
+<if-stmt> --> IF <identifier> THEN <identifier>;

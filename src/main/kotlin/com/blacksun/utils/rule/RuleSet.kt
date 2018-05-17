@@ -14,11 +14,14 @@ class RuleSet(private val name: String, val type: String, parts: String) {
         when (type) {
             "part" -> parse = {
                 val char = Lexer.read()
+                var flag = true
                 for (rule in rules)
                     if (rule.check(char)) {
                         rule.parse()
+                        flag = false
                         break
                     }
+                if (flag) error("")
                 Node()
             }
             "lexer" -> parse = {
@@ -28,23 +31,29 @@ class RuleSet(private val name: String, val type: String, parts: String) {
                 else {
                     val char = Lexer.read()
                     val node = Node(name)
+                    //var flag = true
                     for (rule in rules)
                         if (rule.check(char)) {
                             rule.parse()
+                            //flag = false
                             node += Node(Lexer.getToken())
                             break
                         }
+                    //if (flag) error("")
                     node
                 }
             }
             else -> parse = {
                 val token = Lexer.createTokenNode()
                 val node = Node(name)
+                //var flag = true
                 for (rule in rules)
                     if (rule.check(token)) {
+                        //flag = false
                         node += rule.parse()
                         break
                     }
+                //if (flag) error("")
                 node
             }
         }

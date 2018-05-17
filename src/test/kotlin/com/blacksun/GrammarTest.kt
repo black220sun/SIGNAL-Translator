@@ -144,4 +144,26 @@ class GrammarTest {
 
         assertEquals(expected, result.toString())
     }
+    @Test
+    fun testKeyword() {
+        val file = File("res/testKeyword.sig")
+        Lexer.init(file)
+
+        val expected = """<if-stmt>
+	1	1	IF
+	<identifier>
+		1	4	a
+	1	6	THEN
+	<identifier>
+		1	11	b
+"""
+
+        val result = ByteArrayOutputStream()
+        val old = System.out
+        System.setOut(PrintStream(result))
+        GrammarGen["<if-stmt>"].parse().print()
+        System.setOut(old)
+
+        assertEquals(expected, result.toString())
+    }
 }

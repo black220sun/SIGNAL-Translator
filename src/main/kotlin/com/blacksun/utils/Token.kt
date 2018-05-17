@@ -5,7 +5,7 @@ class Token(
         private val col: Int,
         private val builder: StringBuilder = StringBuilder()
 ) {
-    private val name by lazy(builder::toString)
+    val name by lazy(builder::toString)
 
     constructor(row: Int, col: Int, name: String) : this(row, col, StringBuilder(name))
 
@@ -15,8 +15,16 @@ class Token(
 
     override fun toString() = "$row\t$col\t$name"
     override fun equals(other: Any?) =
-            if (other is Token)
-                toString() == other.toString()
-            else
-                false
+            when (other) {
+                is Token -> toString() == other.toString()
+                is String -> name == other
+                else -> false
+            }
+
+    override fun hashCode(): Int {
+        var result = row
+        result = 31 * result + col
+        result = 31 * result + builder.hashCode()
+        return result
+    }
 }

@@ -4,6 +4,14 @@ private const val defaultValue = ""
 
 class Node(val value: Any = defaultValue) {
     private val children = ArrayList<Node>()
+    val token: Token by lazy {
+        when {
+            value is Token -> value
+            children.isEmpty() -> Token(0,0)
+            else -> children[0].token
+        }
+
+    }
     operator fun plusAssign(node: Node) {
         if (node.value != defaultValue)
             children.plusAssign(node)
@@ -29,4 +37,10 @@ class Node(val value: Any = defaultValue) {
                     false
                 else -> children == other.children
             }
+
+    override fun hashCode(): Int {
+        var result = value.hashCode()
+        result = 31 * result + children.hashCode()
+        return result
+    }
 }

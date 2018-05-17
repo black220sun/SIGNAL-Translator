@@ -21,6 +21,8 @@ object Lexer {
         reader = FileReader(file)
         row = 1
         col = 0
+        noRead = false
+        char = -1
         skip()
     }
 

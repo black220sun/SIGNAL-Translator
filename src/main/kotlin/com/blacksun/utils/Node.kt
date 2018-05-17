@@ -1,8 +1,13 @@
 package com.blacksun.utils
 
-class Node(val value: Any = "") {
+private const val defaultValue = ""
+
+class Node(val value: Any = defaultValue) {
     private val children = ArrayList<Node>()
-    operator fun plusAssign(node: Node) = children.plusAssign(node)
+    operator fun plusAssign(node: Node) {
+        if (node.value != defaultValue)
+            children.plusAssign(node)
+    }
     fun print(depth: Int = 0) {
         for (i in 0 until depth)
             print('\t')
@@ -12,7 +17,16 @@ class Node(val value: Any = "") {
             child.print(newDepth)
     }
 
-    operator fun plusAssign(nodes: List<Node>) = children.plusAssign(nodes)
+    operator fun plusAssign(nodes: List<Node>) = children.plusAssign(nodes.filter { it.value != defaultValue })
 
     override fun toString() = "Node($value)"
+
+    override fun equals(other: Any?): Boolean =
+            when {
+                other !is Node ->
+                    false
+                value != other.value ->
+                    false
+                else -> children == other.children
+            }
 }

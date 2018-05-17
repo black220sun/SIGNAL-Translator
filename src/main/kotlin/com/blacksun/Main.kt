@@ -6,6 +6,7 @@ import com.blacksun.utils.Node
 
 fun main(args: Array<String>) {
     GrammarGen.initGrammar("grammar_test")
-    Lexer.init("test.sig")
-    (GrammarGen.first.parse()).print()
+    Lexer.init("res/test.sig")
+    GrammarGen["<multi-delimiter>"].parse().print()
+    GrammarGen["<multi-delimiter>"].parse().print()
 }

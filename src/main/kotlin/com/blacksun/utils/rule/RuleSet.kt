@@ -21,7 +21,8 @@ class RuleSet(private val name: String, val type: String, parts: String) {
                         flag = false
                         break
                     }
-                if (flag) error("")
+                if (flag)
+                    Lexer.error()
                 Node()
             }
             "lexer" -> parse = {
@@ -31,34 +32,43 @@ class RuleSet(private val name: String, val type: String, parts: String) {
                 else {
                     val char = Lexer.read()
                     val node = Node(name)
-                    //var flag = true
+                    var flag = true
                     for (rule in rules)
                         if (rule.check(char)) {
                             rule.parse()
-                            //flag = false
+                            flag = false
                             node += Node(Lexer.getToken())
                             break
                         }
-                    //if (flag) error("")
+                    if (flag)
+                        error(tokenNode)
                     node
                 }
             }
             else -> parse = {
                 val token = Lexer.createTokenNode()
                 val node = Node(name)
-                //var flag = true
+                var flag = true
                 for (rule in rules)
                     if (rule.check(token)) {
-                        //flag = false
+                        flag = false
                         node += rule.parse()
                         break
                     }
-                //if (flag) error("")
+                if (flag)
+                    error(token)
                 node
             }
         }
         for (part in parts.split('|'))
             rules += RuleAlternative(part.trim())
+    }
+
+    private fun error(node: Node?) {
+        if (node is Node)
+            println("Error: expected $name, found $node")
+        else
+            Lexer.error()
     }
 
     private fun computeFirst(): ArrayList<Int> {

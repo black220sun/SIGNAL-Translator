@@ -14,11 +14,13 @@ object Lexer {
     private var noRead = false
     private var token: Token? = null
     private var node: Node? = null
+    private lateinit var name: String
 
     fun init(path: String) = init(File(path))
 
     fun init(file: File) {
         reader = FileReader(file)
+        name = file.name
         row = 1
         col = 0
         noRead = false
@@ -53,7 +55,7 @@ object Lexer {
     }
 
     fun error() {
-        println("Unexpected symbol '${char.toChar()}' at $row, $col.")
+        println("Error: unexpected symbol '${char.toChar()}' at $name:$row,$col.")
     }
 
     fun getToken(): Token {

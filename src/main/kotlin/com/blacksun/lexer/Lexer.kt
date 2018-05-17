@@ -23,6 +23,7 @@ object Lexer {
         col = 0
         noRead = false
         char = -1
+        node = null
         skip()
     }
 

@@ -49,35 +49,28 @@ class GrammarTest {
         val expected = """<program>
 	<program-identifiers>
 		<identifier>
-			1	5	ABC100cd
-		<identifier>
 			1	1	ABC
+		<identifier>
+			2	1	A1B00cd
 	<digits>
+		<unsigned-integer>
+			3	1	1000
+		<unsigned-integer>
+			3	10	100
 	<tail>
 		<program>
 			<program-identifiers>
 				<identifier>
-					2	1	A1B00cd
+					3	14	a
 				<identifier>
+					3	16	b
 			<digits>
 				<unsigned-integer>
-					3	1	1000
+					3	18	1
 				<unsigned-integer>
-					3	10	100
+					3	20	2
 			<tail>
-				<program>
-					<program-identifiers>
-						<identifier>
-							3	14	a
-						<identifier>
-							3	16	b
-					<digits>
-						<unsigned-integer>
-							3	18	1
-						<unsigned-integer>
-							3	20	2
-					<tail>
-						<empty>
+				<empty>
 """
 
         val result = ByteArrayOutputStream()

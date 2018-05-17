@@ -57,6 +57,7 @@ object Lexer {
 
     fun getToken(): Token {
         val tmp = token ?: error("")
+        skip()
         token = null
         return tmp
     }

@@ -88,4 +88,60 @@ class GrammarTest {
 
         assertEquals(expected, result.toString())
     }
+    @Test
+    fun testDelimiters() {
+        val file = File("res/testDelimiters.sig")
+        Lexer.init(file)
+
+        val expected = """<test-delimiter>
+	<identifier>
+		1	1	ABC
+	<id-with-delimiter>
+		<delimiters>
+			<delimiter>
+				1	4	:=
+			<delimiter-list>
+				<empty>
+		<identifier>
+			1	6	A
+		<id-with-delimiter>
+			<delimiters>
+				<delimiter>
+					1	7	:=
+				<delimiter-list>
+					<delimiter>
+						1	9	:=
+					<delimiter-list>
+						<empty>
+			<identifier>
+				1	12	ABC
+			<id-with-delimiter>
+				<delimiters>
+					<delimiter>
+						1	16	:
+					<delimiter-list>
+						<delimiter>
+							1	17	:
+						<delimiter-list>
+							<delimiter>
+								1	18	:
+							<delimiter-list>
+								<delimiter>
+									1	19	:=
+								<delimiter-list>
+									<empty>
+				<identifier>
+					1	22	a1
+				<id-with-delimiter>
+					<empty>
+"""
+
+        val result = ByteArrayOutputStream()
+        val old = System.out
+        System.setOut(PrintStream(result))
+        GrammarGen["<test-delimiter>"].parse().print()
+        System.setOut(old)
+
+        assertEquals(expected, result.toString())
+    }
 }

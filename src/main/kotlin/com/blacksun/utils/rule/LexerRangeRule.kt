@@ -7,8 +7,6 @@ class LexerRangeRule(range: List<Int>) : Rule("'${range[0].toChar()}'..'${range[
     override val parse = {
         if (Lexer.read() in first)
             Lexer.add()
-        else
-            Lexer.skip()
         Node()
     }
 

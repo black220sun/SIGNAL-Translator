@@ -7,8 +7,6 @@ class LexerRule(private val code: Int) : Rule(code.toChar().toString()) {
     override val parse = {
         if (Lexer.read() == code)
             Lexer.add()
-        else
-            Lexer.skip()
         Node()
     }
 

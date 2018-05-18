@@ -1,9 +1,13 @@
 package com.blacksun.utils.rule
 
 import com.blacksun.lexer.Lexer
+import com.blacksun.utils.GrammarGen
 import com.blacksun.utils.Node
 
 class KeywordRule(name: String) : Rule(name) {
+    init {
+        GrammarGen.registerKeyword(name)
+    }
     override val parse = {
         var tokenNode = Lexer.getTokenNode()
         if (tokenNode == null) {

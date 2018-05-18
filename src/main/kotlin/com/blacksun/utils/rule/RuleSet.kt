@@ -66,7 +66,7 @@ class RuleSet(private val name: String, val type: String, parts: String) {
 
     private fun error(node: Node?) {
         if (node is Node)
-            println("Error: expected $name, found $node")
+            println("Error: expected $name, found ${node.token.name}")
         else
             Lexer.error()
     }

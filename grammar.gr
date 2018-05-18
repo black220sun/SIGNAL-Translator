@@ -12,7 +12,7 @@
 <constant> --> <complex-constant> | <unsigned-constant> | - <unsigned-constant>;
 <variable-declarations> --> VAR <declarations-list> | <empty>;
 <declarations-list> --> <declaration> <declarations-list> | <empty>;
-<declaration> --><variable-identifier> <identifiers-list> : <attribute> <attributes-list> ;;
+<declaration> --> <variable-identifier> <identifiers-list> : <attribute> <attributes-list> ;;
 <identifiers-list> --> , <variable-identifier> <identifiers-list> | <empty>;
 <attributes-list> --> <attribute> <attributes-list> | <empty>;
 <attribute> --> SIGNAL | COMPLEX | INTEGER | FLOAT | BLOCKFLOAT | EXT | [ <range> <ranges-list> ];
@@ -98,7 +98,7 @@ part <integer-part> --> <u-int> | ;
 part <fractional-part> --> # <sign> <u-i> | ;
 part <sign> --> + | - | ;
 lexer <delimiter> --> ';' | ',' | '=' | '+' | '-' | ':' | '[' | ']' |
-    '\' | '!' | '*' | '/' | '&' | '^' | '"' | '#' | 39;
+    '\' | '!' | '*' | '/' | '&' | '^' | '"' | '#' | ')' | 39;
 lexer <dot-dot?> --> '.' <dot?>;
 part <dot?> --> '.' | ;
 lexer <colon-equal?> --> ':' <equal?>;

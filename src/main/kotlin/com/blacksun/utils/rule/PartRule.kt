@@ -9,8 +9,12 @@ class PartRule(name: String) : Rule(name) {
     override val computeFirst = { GrammarGen[name].first }
     override val computeNames = { GrammarGen[name].names + name }
     override fun check(value: Any): Boolean =
-            if (value is Node)
-                value.token.name in names || value.value == name || empty
-            else
+            if (value is Node) {
+                val pre = empty || value.token.name in names
+                if (pre)
+                    true
+                else
+                    !GrammarGen.isKeyword(value.token.name) && value.value in names
+            } else
                 value in first
 }

@@ -53,6 +53,31 @@ class Node(val value: Any = defaultValue) {
             table.error(this)
     }
 
+    fun traverse(func: (Node) -> Unit, pre: Boolean = true,
+                 stop: (Node) -> Boolean = { false },
+                 filter: (Node) -> Boolean = { true }) {
+        if (pre)
+            traversePre(func, stop, filter)
+        else
+            traversePost(func, stop, filter)
+    }
+
+    private fun traversePre(func: (Node) -> Unit, stop: (Node) -> Boolean, filter: (Node) -> Boolean) {
+        if (stop(this))
+            return
+        if (filter(this))
+            func(this)
+        children.forEach { it.traversePre(func, stop, filter) }
+    }
+
+    private fun traversePost(func: (Node) -> Unit, stop: (Node) -> Boolean, filter: (Node) -> Boolean) {
+        if (stop(this))
+            return
+        children.forEach { it.traversePost(func, stop, filter) }
+        if (filter(this))
+            func(this)
+    }
+
     operator fun plusAssign(nodes: List<Node>) = children.plusAssign(nodes.filter { it.value != defaultValue })
 
     override fun toString() = "Node($value)"

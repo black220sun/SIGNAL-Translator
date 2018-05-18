@@ -6,14 +6,16 @@ import com.blacksun.utils.Node
 class KeywordRule(name: String) : Rule(name) {
     override val parse = {
         var tokenNode = Lexer.getTokenNode()
+        println("Keyword rule $name, node $tokenNode")
         if (tokenNode == null) {
             Lexer.createTokenNode()
             tokenNode = Lexer.getTokenNode()!!
         }
         val token = tokenNode.token
-        if (token.name == name)
+        if (token.name == name) {
+            println("Return Node($token) from $name")
             Node(token)
-        else {
+        } else {
             Lexer.error()
             Node()
         }

@@ -2,7 +2,7 @@ package com.blacksun.utils.rule
 
 import com.blacksun.utils.Node
 
-abstract class Rule(private val name: String) {
+abstract class Rule(protected val name: String) {
     val first by lazy { computeFirst() }
     val names by lazy { computeNames() }
     open val empty = false

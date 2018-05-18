@@ -5,7 +5,7 @@ import com.blacksun.utils.Node
 
 class EmptyRule : Rule("") {
     override val empty = true
-    override val parse = { Lexer.skip(); Node() }
+    override val parse = { println("Empty rule"); Lexer.skip(); Node() }
     override val computeFirst = { emptyList<Int>() }
     override val computeNames = { emptyList<String>() }
 }

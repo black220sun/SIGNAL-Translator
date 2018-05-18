@@ -60,6 +60,7 @@ object Lexer {
 
     fun getToken(): Token {
         val tmp = token ?: error("")
+        println("Return $tmp from getToken()")
         skip()
         token = null
         return tmp
@@ -78,6 +79,7 @@ object Lexer {
 
     fun getTokenNode(): Node? {
         val tmp = node
+        println("Return $tmp from getTokenNode()")
         node = null
         return tmp
     }

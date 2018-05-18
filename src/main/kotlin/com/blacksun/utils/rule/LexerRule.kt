@@ -5,6 +5,7 @@ import com.blacksun.utils.Node
 
 class LexerRule(private val code: Int) : Rule(code.toChar().toString()) {
     override val parse = {
+        println("Lexer rule $name")
         if (Lexer.read() == code)
             Lexer.add()
         Node()

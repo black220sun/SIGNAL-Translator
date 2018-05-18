@@ -3,12 +3,7 @@
     PROGRAM <procedure-identifier> ; <block> . |
     PROCEDURE <procedure-identifier> <parameters-list> ; <block> ;;
 <block> --> <declarations> BEGIN <statements-list> END;
-<declarations> -->
-    <label-declarations>
-    <constant-declarations>
-    <variable-declarations>
-    <math-function-declarations>
-    <procedure-declarations>;
+<declarations> --> <label-declarations> <constant-declarations> <variable-declarations> <math-function-declarations> <procedure-declarations>;
 <label-declarations> --> LABEL <unsigned-integer> <labels-list>; | <empty>;
 <labels-list> --> , <unsigned-integer> <labels-list> | <empty>;
 <constant-declarations> --> CONST <constant-declarations-list> | <empty>;

@@ -5,6 +5,7 @@ import com.blacksun.utils.Node
 
 class LexerRangeRule(range: List<Int>) : Rule("'${range[0].toChar()}'..'${range[1].toChar()}'") {
     override val parse = {
+        println("Lexer range rule $name")
         if (Lexer.read() in first)
             Lexer.add()
         Node()

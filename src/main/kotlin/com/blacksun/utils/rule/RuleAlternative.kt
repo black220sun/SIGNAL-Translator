@@ -13,7 +13,6 @@ class RuleAlternative(rule: String) {
             rules += Rule[part.trim()]
     }
     fun parse(): List<Node> = rules.map { it.parse() }
-    fun check(char: Int) = empty || char in first
-    fun check(node: Node) = empty || node.value in names || node.token.name in names
+    fun check(value: Any) = rules[0].check(value)
     override fun toString() = rules.joinToString(" ")
 }

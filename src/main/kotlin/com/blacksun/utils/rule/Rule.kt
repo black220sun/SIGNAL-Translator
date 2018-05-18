@@ -2,13 +2,14 @@ package com.blacksun.utils.rule
 
 import com.blacksun.utils.Node
 
-abstract class Rule(private val name: String) {
+abstract class Rule(protected val name: String) {
     val first by lazy { computeFirst() }
     val names by lazy { computeNames() }
     open val empty = false
     abstract val parse: () -> Node
     protected abstract val computeFirst: () -> List<Int>
     protected abstract val computeNames: () -> List<String>
+    abstract fun check(value: Any): Boolean
     companion object {
         @JvmStatic
         operator fun get(name: String): Rule =

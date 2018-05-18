@@ -14,4 +14,5 @@ class LexerRangeRule(range: List<Int>) : Rule("'${range[0].toChar()}'..'${range[
         (range[0]..range[1]).toList()
     }
     override val computeNames = { emptyList<String>() }
+    override fun check(value: Any): Boolean  = value in first
 }

@@ -12,4 +12,5 @@ class LexerRule(private val code: Int) : Rule(code.toChar().toString()) {
 
     override val computeFirst = { arrayListOf(code) }
     override val computeNames = { emptyList<String>() }
+    override fun check(value: Any): Boolean  = value == code
 }

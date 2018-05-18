@@ -20,5 +20,5 @@ class KeywordRule(name: String) : Rule(name) {
     }
     override val computeFirst = { emptyList<Int>() }
     override val computeNames = { arrayListOf(name) }
-
+    override fun check(value: Any) = (value as? Node)?.token?.name == name
 }

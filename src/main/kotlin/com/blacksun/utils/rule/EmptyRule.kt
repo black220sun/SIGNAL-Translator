@@ -8,4 +8,5 @@ class EmptyRule : Rule("") {
     override val parse = { Lexer.skip(); Node() }
     override val computeFirst = { emptyList<Int>() }
     override val computeNames = { emptyList<String>() }
+    override fun check(value: Any) = true
 }

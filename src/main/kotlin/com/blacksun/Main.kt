@@ -4,5 +4,5 @@ import com.blacksun.utils.GrammarGen
 
 fun main(args: Array<String>) {
     GrammarGen.initGrammar("grammar.gr")
-    GrammarGen.parse("res/test.sig")
+    GrammarGen.parse("res/test.sig").print()
 }

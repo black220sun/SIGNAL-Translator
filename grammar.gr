@@ -3,12 +3,7 @@
     PROGRAM <procedure-identifier> ; <block> . |
     PROCEDURE <procedure-identifier> <parameters-list> ; <block> ;;
 <block> --> <declarations> BEGIN <statements-list> END;
-<declarations> -->
-    <label-declarations>
-    <constant-declarations>
-    <variable-declarations>
-    <math-function-declarations>
-    <procedure-declarations>;
+<declarations> --> <label-declarations> <constant-declarations> <variable-declarations> <math-function-declarations> <procedure-declarations>;
 <label-declarations> --> LABEL <unsigned-integer> <labels-list>; | <empty>;
 <labels-list> --> , <unsigned-integer> <labels-list> | <empty>;
 <constant-declarations> --> CONST <constant-declarations-list> | <empty>;
@@ -83,24 +78,25 @@
 <variable> --> <variable-identifier><dimension> | <complex-variable>;
 <complex-variable> --> " <complex-number> ";
 <dimension> --> [ <expression> <expressions-list> ] | <empty>;
-<expressions-list> --> ,<expression><expressions-list> | <empty>;
+<expressions-list> --> , <expression><expressions-list> | <empty>;
 <empty> --> ;
 
-<complex-constant> --> ' <complex-number> ';
-<unsigned-constant> --> <unsigned-number> | <unsigned-integer>;
+<complex-constant> --> 39 <complex-number> 39;
+lexer <unsigned-constant> --> <unsigned-number>;
+lexer <unsigned-integer> --> <u-int>;
 <complex-number> --> <left-part> <right-part>;
 <left-part> --> <expression> | <empty>;
-<right-part> --> , <expression> | $EXP( <expression> ) | ;
+<right-part> --> , <expression> | $EXP ( <expression> ) | ;
 <constant-identifier> --> <identifier>;
 <variable-identifier> --> <identifier>;
 <procedure-identifier> --> <identifier>;
 <function-identifier> --> <identifier>;
 <builtin-function-identifier> --> <identifier>;
 <assembly-insert-file-identifier> --> <identifier>;
-<unsigned-number> --> <integer-part> <fractional-part>;
-<integer-part> --> <unsigned-integer> | ;
-<fractional-part> --> # <sign> <unsigned-integer>;
-<sign> --> + | - | ;
+part <unsigned-number> --> <integer-part> <fractional-part>;
+part <integer-part> --> <u-int> | ;
+part <fractional-part> --> # <sign> <u-i> | ;
+part <sign> --> + | - | ;
 lexer <delimiter> --> ';' | ',' | '=' | '+' | '-' | ':' | '[' | ']' |
     '\' | '!' | '*' | '/' | '&' | '^' | '"' | '#' | 39;
 lexer <dot-dot?> --> '.' <dot?>;
@@ -115,7 +111,7 @@ lexer <greater-any3?> --> '>' <any3?>;
 part <any3?> --> '=' | ;
 lexer <exp> --> '$' EXP;
 lexer <identifier> --> <letter> <string>;
-lexer <unsigned-integer> --> <digit> <digit-string>;
+part <u-int> --> <digit> <digit-string>;
 part <digit-string> --> <digit> <digit-string> | ;
 part <letter> --> 'A'..'Z';
 part <string> --> <letter> <string> | <digit> <string> | ;

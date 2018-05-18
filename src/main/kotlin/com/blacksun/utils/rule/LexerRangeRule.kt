@@ -1,7 +1,7 @@
 package com.blacksun.utils.rule
 
 import com.blacksun.lexer.Lexer
-import com.blacksun.utils.Node
+import com.blacksun.utils.node.Node
 
 class LexerRangeRule(range: List<Int>) : Rule("'${range[0].toChar()}'..'${range[1].toChar()}'") {
     override val parse = {

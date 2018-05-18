@@ -1,7 +1,7 @@
 package com.blacksun.lexer
 
 import com.blacksun.utils.GrammarGen
-import com.blacksun.utils.Node
+import com.blacksun.utils.node.Node
 import com.blacksun.utils.Token
 import java.io.File
 import java.io.FileReader

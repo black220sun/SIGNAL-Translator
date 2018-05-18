@@ -13,6 +13,8 @@ class Token(
         builder.append(char.toChar())
     }
 
+    fun rename(name: String) = Token(row, col, name)
+
     override fun toString() = "$row\t$col\t$name"
     override fun equals(other: Any?) =
             when (other) {

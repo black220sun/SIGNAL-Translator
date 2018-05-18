@@ -1,19 +1,15 @@
-package com.blacksun.utils
+package com.blacksun.utils.node
+
+import com.blacksun.utils.Token
 
 private const val defaultValue = "error"
 
-class Node(val value: Any = defaultValue) {
-    companion object {
-        fun fromPattern(text: String): Node {
-            return Node()
-        }
-    }
-
+class Node(val value: Any = defaultValue): Cloneable {
     private val children = ArrayList<Node>()
     val token: Token by lazy {
         when {
             value is Token -> value
-            children.isEmpty() -> Token(0,0)
+            children.isEmpty() -> Token(0, 0)
             else -> children[0].token
         }
 
@@ -35,13 +31,43 @@ class Node(val value: Any = defaultValue) {
             child.print(newDepth)
     }
 
+    fun rewrite(rules: MatcherRules): NodeMatcher {
+        val table = NodeMatcher()
+        val node = rewrite(rules, table)
+        table.setRoot(node)
+        return table
+    }
+
+    private fun rewrite(rules: MatcherRules, table: NodeMatcher): Node {
+        val children = children.map { it.rewrite(rules, table) }
+        val name = (value as? Token)?.name ?: value
+        val name1 = "?$name"
+        val name2 = "!$name"
+        return when {
+            name1 in rules -> {
+                val node = rules[name1]!!(this)
+                node += children
+                table[name1] = node
+                node
+            }
+            name2 in rules -> {
+                val node = rules[name2]!!(this)
+                table[name1] = node
+                node
+            }
+            else -> {
+                val node = Node(value)
+                node += children
+                node
+            }
+        }
+    }
+
     fun match(node: Node): NodeMatcher {
         val table = NodeMatcher()
         match(node, table)
         return table
     }
-
-    fun match(text: String) = match(Node.fromPattern(text))
 
     private fun match(node: Node, table: NodeMatcher) {
         val other = node.value

@@ -1,6 +1,6 @@
 package com.blacksun.utils.rule
 
-import com.blacksun.utils.Node
+import com.blacksun.utils.node.Node
 
 abstract class Rule(protected val name: String) {
     val first by lazy { computeFirst() }

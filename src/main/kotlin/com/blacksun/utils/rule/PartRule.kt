@@ -1,7 +1,7 @@
 package com.blacksun.utils.rule
 
 import com.blacksun.utils.GrammarGen
-import com.blacksun.utils.Node
+import com.blacksun.utils.node.Node
 
 class PartRule(name: String) : Rule(name) {
     override val empty by lazy { GrammarGen[name].empty }

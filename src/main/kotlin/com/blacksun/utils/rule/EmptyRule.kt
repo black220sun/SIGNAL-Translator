@@ -1,7 +1,7 @@
 package com.blacksun.utils.rule
 
 import com.blacksun.lexer.Lexer
-import com.blacksun.utils.Node
+import com.blacksun.utils.node.Node
 
 class EmptyRule : Rule("") {
     override val empty = true

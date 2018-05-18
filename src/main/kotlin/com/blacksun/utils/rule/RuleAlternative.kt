@@ -1,6 +1,6 @@
 package com.blacksun.utils.rule
 
-import com.blacksun.utils.Node
+import com.blacksun.utils.node.Node
 
 class RuleAlternative(rule: String) {
     private val rules = ArrayList<Rule>()

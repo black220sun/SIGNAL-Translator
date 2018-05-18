@@ -2,7 +2,7 @@ package com.blacksun.utils.rule
 
 import com.blacksun.lexer.Lexer
 import com.blacksun.utils.GrammarGen
-import com.blacksun.utils.Node
+import com.blacksun.utils.node.Node
 
 class RuleSet(private val name: String, val type: String, parts: String) {
     private val rules = ArrayList<RuleAlternative>()

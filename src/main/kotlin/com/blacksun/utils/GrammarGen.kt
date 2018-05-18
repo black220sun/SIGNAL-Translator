@@ -1,6 +1,7 @@
 package com.blacksun.utils
 
 import com.blacksun.lexer.Lexer
+import com.blacksun.utils.node.Node
 import com.blacksun.utils.rule.RuleSet
 import java.io.File
 import java.io.FileReader

@@ -2,7 +2,7 @@ package com.blacksun
 
 import com.blacksun.lexer.Lexer
 import com.blacksun.utils.GrammarGen
-import com.blacksun.utils.Node
+import com.blacksun.utils.node.Node
 import com.blacksun.utils.Token
 import org.junit.Assert.assertEquals
 import org.junit.BeforeClass

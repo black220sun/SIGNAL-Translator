@@ -1,20 +1,16 @@
 package com.blacksun
 
 import com.blacksun.utils.GrammarGen
-import com.blacksun.utils.Node
+import com.blacksun.utils.node.MatcherRules
+import com.blacksun.utils.node.Node
 import java.io.File
 
 fun main(args: Array<String>) {
     GrammarGen.initGrammar("grammar.gr")
     val node = GrammarGen.parse(File("res/test.sig"))
-    val matchNode = Node("<signal-program>")
-    val program = matchNode + Node("<program>")
-    val any = Node("?")
-    program + any
-    program + Node("?ident")
-    program + any
-    program + any
-    program + any
-    val matcher = node.match(matchNode)
-    matcher["?ident"]?.print()
+    node.print()
+    val rules = MatcherRules()
+    rules["?TEST"] = { Node(it.token.rename("TES4")) }
+    rules["!<block>"] = { Node("<empty>") }
+    node.rewrite(rules).root.print()
 }

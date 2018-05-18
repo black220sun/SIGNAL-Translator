@@ -13,11 +13,13 @@ object GrammarGen {
     val lexerRules by lazy { map.map { (_, r) -> r }.filter { it.type == "lexer" } }
     private val keywords_ = HashMap<String, Boolean>()
     private val keywords by lazy { keywords_.keys }
+    private var errors = 0
 
     fun initGrammar(path: String) = initGrammar(File(path))
 
     fun initGrammar(file: File) {
         keywords_.clear()
+        map.clear()
         FileReader(file).forEachLine(::parseLine)
     }
 
@@ -48,9 +50,15 @@ object GrammarGen {
     fun parse(path: String) = parse(File(path))
     fun parse(file: File): Node {
         Lexer.init(file)
-        return first.parse()
+        errors = 0
+        val node = first.parse()
+        val lexerErrors = Lexer.getErrors()
+        if (errors > 0 || lexerErrors > 0)
+            println("${file.name} parsed with errors: $lexerErrors lexer errors, $errors parser errors")
+        return node
     }
 
     fun isKeyword(name: String): Boolean = name in keywords
     fun registerKeyword(name: String) = keywords_.put(name, true)
+    fun error() = ++errors
 }

@@ -19,7 +19,7 @@ class GrammarTest {
     }
     @Test
     fun testLexer() {
-        val file = File("res/testLexer.sig")
+        val file = File("res/testLexer.txt")
         Lexer.init(file)
 
         val expected = Node("<identifier>")
@@ -31,7 +31,7 @@ class GrammarTest {
     }
     @Test
     fun testEmpty() {
-        val file = File("res/testEmpty.sig")
+        val file = File("res/testEmpty.txt")
         Lexer.init(file)
 
         val expected = Node("<tail>")
@@ -43,7 +43,7 @@ class GrammarTest {
     }
     @Test
     fun testProgram() {
-        val file = File("res/testProgram.sig")
+        val file = File("res/testProgram.txt")
         Lexer.init(file)
 
         val expected = """<program>
@@ -83,7 +83,7 @@ class GrammarTest {
     }
     @Test
     fun testDelimiters() {
-        val file = File("res/testDelimiters.sig")
+        val file = File("res/testDelimiters.txt")
         Lexer.init(file)
 
         val expected = """<test-delimiter>
@@ -139,7 +139,7 @@ class GrammarTest {
     }
     @Test
     fun testKeyword() {
-        val file = File("res/testKeyword.sig")
+        val file = File("res/testKeyword.txt")
         Lexer.init(file)
 
         val expected = """<if-stmt>

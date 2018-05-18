@@ -15,6 +15,7 @@ object Lexer {
     private var token: Token? = null
     private var node: Node? = null
     private lateinit var name: String
+    private var errors = 0
 
     fun init(path: String) = init(File(path))
 
@@ -26,6 +27,7 @@ object Lexer {
         noRead = false
         char = -1
         node = null
+        errors = 0
         skip()
     }
 
@@ -55,6 +57,7 @@ object Lexer {
     }
 
     fun error() {
+        ++errors
         println("Error: unexpected symbol '${char.toChar()}' at $name:$row,$col.")
     }
 
@@ -81,4 +84,6 @@ object Lexer {
         node = null
         return tmp
     }
+
+    fun getErrors() = errors
 }

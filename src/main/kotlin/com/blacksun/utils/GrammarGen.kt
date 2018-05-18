@@ -47,14 +47,23 @@ object GrammarGen {
     }
 
     fun print() = map.forEach { _, r -> println(r) }
-    fun parse(path: String) = parse(File(path))
+
+    fun parse(text: String): Node {
+        Lexer.init(text)
+        return parse("Input from string", true)
+    }
+
     fun parse(file: File): Node {
         Lexer.init(file)
+        return parse(file.name, true)
+    }
+
+    private fun parse(name: String, @Suppress("UNUSED_PARAMETER") void: Boolean): Node {
         errors = 0
         val node = first.parse()
         val lexerErrors = Lexer.getErrors()
         if (errors > 0 || lexerErrors > 0)
-            println("${file.name} parsed with errors: $lexerErrors lexer errors, $errors parser errors")
+            println("$name parsed with errors: $lexerErrors lexer errors, $errors parser errors")
         return node
     }
 

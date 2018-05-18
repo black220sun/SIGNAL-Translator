@@ -3,6 +3,12 @@ package com.blacksun.utils
 private const val defaultValue = "error"
 
 class Node(val value: Any = defaultValue) {
+    companion object {
+        fun fromPattern(text: String): Node {
+            return Node()
+        }
+    }
+
     private val children = ArrayList<Node>()
     val token: Token by lazy {
         when {
@@ -11,6 +17,10 @@ class Node(val value: Any = defaultValue) {
             else -> children[0].token
         }
 
+    }
+    operator fun plus(node: Node): Node {
+        this += node
+        return node
     }
     operator fun plusAssign(node: Node) {
         if (node.value != defaultValue)
@@ -23,6 +33,24 @@ class Node(val value: Any = defaultValue) {
         val newDepth = depth + 1
         for (child in children)
             child.print(newDepth)
+    }
+
+    fun match(node: Node): NodeMatcher {
+        val table = NodeMatcher()
+        match(node, table)
+        return table
+    }
+
+    fun match(text: String) = match(Node.fromPattern(text))
+
+    private fun match(node: Node, table: NodeMatcher) {
+        val other = node.value
+        if (other is String && other[0] == '?')
+            table[other] = this
+        else if (value == other && children.size == node.children.size)
+            children.forEachIndexed { index, child -> child.match(node.children[index], table) }
+        else
+            table.error(this)
     }
 
     operator fun plusAssign(nodes: List<Node>) = children.plusAssign(nodes.filter { it.value != defaultValue })

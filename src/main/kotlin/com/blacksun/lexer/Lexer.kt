@@ -5,23 +5,33 @@ import com.blacksun.utils.Node
 import com.blacksun.utils.Token
 import java.io.File
 import java.io.FileReader
+import java.io.Reader
+import java.io.StringReader
 
 object Lexer {
     private var row = 1
     private var col = 0
     private var char = 0
-    private lateinit var reader: FileReader
+    private lateinit var reader: Reader
     private var noRead = false
     private var token: Token? = null
     private var node: Node? = null
     private lateinit var name: String
     private var errors = 0
 
-    fun init(path: String) = init(File(path))
+    fun init(text: String) {
+        name = "input from string"
+        reader = StringReader(text)
+        init()
+    }
 
     fun init(file: File) {
-        reader = FileReader(file)
         name = file.name
+        reader = FileReader(file)
+        init()
+    }
+
+    private fun init() {
         row = 1
         col = 0
         noRead = false

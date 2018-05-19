@@ -1,0 +1,15 @@
+PROGRAM TESTPROG;
+VAR
+    AGE : INTEGER;
+    HEIGHT : FLOAT;
+    MARKS : [75..90];
+    HMARK : INTEGER;
+BEGIN
+    AGE := 19;
+    HEIGHT := 171;
+    HMARK := MARKS[89];
+    HMARK := MARKS[AGE];
+    LOOP
+        HMARK := AGE;
+    ENDLOOP;
+END.

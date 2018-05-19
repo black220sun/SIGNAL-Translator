@@ -10,7 +10,7 @@ object GrammarGen {
     private val map = LinkedHashMap<String, RuleSet>()
     operator fun get(name: String) = map[name]!!
     private var rule = StringBuilder()
-    lateinit var first: RuleSet
+    private lateinit var first: String
     val lexerRules by lazy { map.map { (_, r) -> r }.filter { it.type == "lexer" } }
     private val keywords_ = HashMap<String, Boolean>()
     private val keywords by lazy { keywords_.keys }
@@ -38,7 +38,7 @@ object GrammarGen {
         val (name, type) = parseParts(parts[0])
         map[name] = RuleSet(name, type, parts[1])
         if (!::first.isInitialized)
-            first = map[name]!!
+            first = name
     }
 
     private fun parseParts(part: String): Pair<String, String> {
@@ -49,19 +49,19 @@ object GrammarGen {
 
     fun print() = map.forEach { _, r -> println(r) }
 
-    fun parse(text: String): Node {
+    fun parse(text: String, rule: String = first): Node {
         Lexer.init(text)
-        return parse("Input from string", true)
+        return parse("Input from string", rule, 1)
     }
 
-    fun parse(file: File): Node {
+    fun parse(file: File, rule: String = first): Node {
         Lexer.init(file)
-        return parse(file.name, true)
+        return parse(file.name, rule, 1)
     }
 
-    private fun parse(name: String, @Suppress("UNUSED_PARAMETER") void: Boolean): Node {
+    private fun parse(name: String, rule: String, void: Any): Node {
         errors = 0
-        val node = first.parse()
+        val node = GrammarGen[rule].parse()
         val lexerErrors = Lexer.getErrors()
         if (errors > 0 || lexerErrors > 0)
             println("$name parsed with errors: $lexerErrors lexer errors, $errors parser errors")

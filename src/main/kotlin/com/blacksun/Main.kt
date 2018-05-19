@@ -4,5 +4,6 @@ import com.blacksun.utils.GrammarGen
 
 fun main(args: Array<String>) {
     GrammarGen.initGrammar("grammar.gr")
-    GrammarGen.parse(" 15..75", "<range>").print()
+    GrammarGen["<unsigned-constant>"].empty
+    GrammarGen.parse("A := B[10];", "<statement>").print()
 }

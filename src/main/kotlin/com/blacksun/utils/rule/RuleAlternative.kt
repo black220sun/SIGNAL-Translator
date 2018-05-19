@@ -5,8 +5,16 @@ import com.blacksun.utils.Node
 class RuleAlternative(rule: String) {
     private val rules = ArrayList<Rule>()
     val first by lazy { rules[0].first }
-    val names by lazy { rules[0].names }
-    val empty by lazy { rules[0] is EmptyRule || rules[0].empty }
+    val names by lazy {
+        val names = ArrayList<String>()
+        for (r in  rules) {
+            names += r.names
+            if (!r.empty)
+                break
+        }
+        names.toSet().toList()
+    }
+    val empty by lazy { rules.all { it.empty } }
 
     init {
         for (part in rule.split(' ', '\t'))

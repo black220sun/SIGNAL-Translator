@@ -23,7 +23,7 @@ class GrammarTest {
         Lexer.init(file)
 
         val expected = Node("<identifier>")
-        expected += Node(Token(1, 5, "ABC100cd"))
+        expected += Node(Token("ABC100cd"))
 
         val result = Lexer.createTokenNode()
 
@@ -49,26 +49,26 @@ class GrammarTest {
         val expected = """<program>
 	<program-identifiers>
 		<identifier>
-			1	1	ABC
+			ABC
 		<identifier>
-			2	1	A1B00cd
+			A1B00cd
 	<digits>
 		<unsigned-integer>
-			3	1	1000
+			1000
 		<unsigned-integer>
-			3	10	100
+			100
 	<tail>
 		<program>
 			<program-identifiers>
 				<identifier>
-					3	14	a
+					a
 				<identifier>
-					3	16	b
+					b
 			<digits>
 				<unsigned-integer>
-					3	18	1
+					1
 				<unsigned-integer>
-					3	20	2
+					2
 			<tail>
 				<empty>
 """
@@ -88,43 +88,43 @@ class GrammarTest {
 
         val expected = """<test-delimiter>
 	<identifier>
-		1	1	ABC
+		ABC
 	<id-with-delimiter>
 		<delimiters>
 			<delimiter>
-				1	4	:=
+				:=
 			<delimiter-list>
 				<empty>
 		<identifier>
-			1	6	A
+			A
 		<id-with-delimiter>
 			<delimiters>
 				<delimiter>
-					1	7	:=
+					:=
 				<delimiter-list>
 					<delimiter>
-						1	9	:=
+						:=
 					<delimiter-list>
 						<empty>
 			<identifier>
-				1	12	ABC
+				ABC
 			<id-with-delimiter>
 				<delimiters>
 					<delimiter>
-						1	16	:
+						:
 					<delimiter-list>
 						<delimiter>
-							1	17	:
+							:
 						<delimiter-list>
 							<delimiter>
-								1	18	:
+								:
 							<delimiter-list>
 								<delimiter>
-									1	19	:=
+									:=
 								<delimiter-list>
 									<empty>
 				<identifier>
-					1	22	a1
+					a1
 				<id-with-delimiter>
 					<empty>
 """
@@ -143,12 +143,12 @@ class GrammarTest {
         Lexer.init(file)
 
         val expected = """<if-stmt>
-	1	1	IF
+	IF
 	<identifier>
-		1	4	a
-	1	6	THEN
+		a
+	THEN
 	<identifier>
-		1	11	b
+		b
 """
 
         val result = ByteArrayOutputStream()

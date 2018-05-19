@@ -9,14 +9,18 @@ class Node(val value: Any = defaultValue): Cloneable {
     val token: Token by lazy {
         when {
             value is Token -> value
-            children.isEmpty() -> Token(0, 0)
+            children.isEmpty() -> Token()
             else -> children[0].token
         }
 
     }
     operator fun plus(node: Node): Node {
         this += node
-        return node
+        return this
+    }
+    operator fun plus(nodes: List<Node>): Node {
+        this += nodes
+        return this
     }
     operator fun plusAssign(node: Node) {
         if (node.value != defaultValue)
@@ -31,36 +35,16 @@ class Node(val value: Any = defaultValue): Cloneable {
             child.print(newDepth)
     }
 
-    fun rewrite(rules: MatcherRules): NodeMatcher {
-        val table = NodeMatcher()
-        val node = rewrite(rules, table)
-        table.setRoot(node)
-        return table
-    }
-
-    private fun rewrite(rules: MatcherRules, table: NodeMatcher): Node {
-        val children = children.map { it.rewrite(rules, table) }
+    fun rewrite(rules: MatcherRules): Node {
+        val children = children.map { it.rewrite(rules) }.toTypedArray()
         val name = (value as? Token)?.name ?: value
-        val name1 = "?$name"
-        val name2 = "!$name"
-        return when {
-            name1 in rules -> {
-                val node = rules[name1]!!(this)
-                node += children
-                table[name1] = node
-                node
-            }
-            name2 in rules -> {
-                val node = rules[name2]!!(this)
-                table[name1] = node
-                node
-            }
-            else -> {
-                val node = Node(value)
-                node += children
-                node
-            }
-        }
+        val nameExt = "?$name"
+        val node = Node(value)
+        node.children += children
+        return if (nameExt in rules)
+            rules[nameExt]!!(node)
+        else
+            node
     }
 
     fun match(node: Node): NodeMatcher {

@@ -57,7 +57,7 @@ object Lexer {
     fun add() {
         noRead = false
         if (token == null)
-            token = Token(row, col)
+            token = Token()
         token!! += char
     }
 

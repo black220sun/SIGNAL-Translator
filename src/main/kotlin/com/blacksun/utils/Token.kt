@@ -2,6 +2,7 @@ package com.blacksun.utils
 
 class Token(private val builder: StringBuilder = StringBuilder()) {
     val name by lazy(builder::toString)
+    fun name() = builder.toString()
 
     constructor(name: String) : this(StringBuilder(name))
 

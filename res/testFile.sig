@@ -1,0 +1,9 @@
+PROGRAM TEST;
+VAR
+    A: EXT;
+    A2 : INTEGER
+        EXT;
+BEGIN
+    FOR A:=10 TO 5 * 2 MOD 17 / 10 DO
+    ENDFOR;
+END.

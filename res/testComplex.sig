@@ -1,0 +1,14 @@
+PROGRAM NAME;
+CONST
+A=5;B=6;
+C=7;
+D=8;
+C1 = 100;
+C2 =			200;
+C3=300;
+COMP1 = '5,10';
+COMP2 = '5$EXP(20)';
+
+BEGIN
+
+END.

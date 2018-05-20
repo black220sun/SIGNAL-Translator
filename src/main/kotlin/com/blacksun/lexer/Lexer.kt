@@ -3,10 +3,7 @@ package com.blacksun.lexer
 import com.blacksun.utils.GrammarGen
 import com.blacksun.utils.node.Node
 import com.blacksun.utils.Token
-import java.io.File
-import java.io.FileReader
-import java.io.Reader
-import java.io.StringReader
+import java.io.*
 
 object Lexer {
     private var row = 1
@@ -18,6 +15,9 @@ object Lexer {
     private var node: Node? = null
     private lateinit var name: String
     private var errors = 0
+    private lateinit var save: Save
+
+    private data class Save(val row_: Int = row, val col_: Int = col, val char_: Int = char)
 
     fun init(text: String) {
         name = "input from string"
@@ -32,6 +32,7 @@ object Lexer {
     }
 
     private fun init() {
+        reader = BufferedReader(reader)
         row = 1
         col = 0
         noRead = false
@@ -64,6 +65,7 @@ object Lexer {
     fun skip() {
         while (read() in GrammarGen["skip"].first)
             noRead = false
+        hide()
     }
 
     fun error() {
@@ -87,6 +89,41 @@ object Lexer {
             }
         }
         return Node("error")
+    }
+
+    private fun hide() {
+        val tmp = if (node is Node)
+            Token(row, col, node!!.token.name)
+        else
+            prepareToken()
+        if (tmp.name() in GrammarGen["hide"].names) {
+            val end = GrammarGen["show"].names[0]
+            val len = tmp.name().length
+            do {
+                read()
+                tmp += char
+                noRead = false
+            } while (!tmp.name().drop(len).endsWith(end))
+        } else if (node == null) {
+            reader.reset()
+            noRead = true
+            row = save.row_
+            col = save.col_
+            char = save.char_
+        }
+    }
+
+    private fun prepareToken(): Token {
+        val len = GrammarGen["hide"].names[0].length
+        val tmp = Token(row, col)
+        reader.mark(len)
+        save = Save()
+        for (i in 1..len) {
+            read()
+            tmp += char
+            noRead = false
+        }
+        return tmp
     }
 
     fun getTokenNode(): Node? {

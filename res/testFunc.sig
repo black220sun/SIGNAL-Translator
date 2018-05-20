@@ -1,0 +1,5 @@
+PROGRAM PROG1;
+DEFFUNC
+    ABS = 10\1,2;
+    INC = 1\1,0;
+BEGIN   END.

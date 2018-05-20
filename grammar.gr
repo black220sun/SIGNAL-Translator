@@ -8,7 +8,7 @@
 <labels-list> --> , <unsigned-integer> <labels-list> | <empty>;
 <constant-declarations> --> CONST <constant-declarations-list> | <empty>;
 <constant-declarations-list> --> <constant-declaration> <constant-declarations-list> | <empty>;
-<constant-declaration> --> <constant-identifier> = <constant>;
+<constant-declaration> --> <constant-identifier> = <constant> ;;
 <constant> --> <complex-constant> | <unsigned-constant> | - <unsigned-constant>;
 <variable-declarations> --> VAR <declarations-list> | <empty>;
 <declarations-list> --> <declaration> <declarations-list> | <empty>;
@@ -63,7 +63,7 @@
 <summands-list> --> <add-instruction> <summand> <summands-list> | <empty>;
 <add-instruction> --> + | - | !;
 <summand> --> <multiplier> <multipliers-list>;
-<multipliers-list> --> <multiplication-instruction> <multiplier><multipliers-list> | <empty>;
+<multipliers-list> --> <multiplication-instruction> <multiplier> <multipliers-list> | <empty>;
 <multiplication-instruction> --> * | / | & | MOD;
 <multiplier> -->
     <unsigned-constant> |
@@ -74,17 +74,17 @@
     ^ <multiplier>;
 <variable> --> <variable-identifier> <variable-rest> | <complex-variable>;
 <variable-rest> --> <dimension> | <actual-arguments> | ;
-<complex-variable> --> " <complex-number> ";
 <dimension> --> [ <expression> <expressions-list> ] | <empty>;
-<expressions-list> --> , <expression><expressions-list> | <empty>;
+<expressions-list> --> , <expression> <expressions-list> | <empty>;
 <empty> --> ;
 
-<complex-constant> --> 39 <complex-number> 39;
+lexer <complex-variable> --> '"' <complex-number> '"';
+lexer <complex-constant> --> 39 <complex-number> 39;
 <unsigned-constant> --> <unsigned-number> | <unsigned-integer>;
 lexer <unsigned-integer> --> <u-int>;
-<complex-number> --> <left-part> <right-part>;
-<left-part> --> <expression> | <empty>;
-<right-part> --> , <expression> | $EXP ( <expression> ) | ;
+part <complex-number> --> <left-part> <right-part>;
+part <left-part> --> <u-int> | <empty>;
+part <right-part> --> ',' <u-int> | <exp> '(' <u-int> ')' | ;
 <constant-identifier> --> <identifier>;
 <variable-identifier> --> <identifier>;
 <procedure-identifier> --> <identifier>;
@@ -107,7 +107,7 @@ lexer <less-any2?> --> '<' <any2?>;
 part <any2?> --> '=' | '>' | ;
 lexer <greater-any3?> --> '>' <any3?>;
 part <any3?> --> '=' | ;
-lexer <exp> --> '$' EXP;
+part <exp> --> '$' 'E' 'X' 'P';
 lexer <identifier> --> <letter> <string>;
 part <u-int> --> <digit> <digit-string>;
 part <digit-string> --> <digit> <digit-string> | ;

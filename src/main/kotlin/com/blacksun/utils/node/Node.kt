@@ -26,13 +26,13 @@ class Node(val value: Any = defaultValue): Cloneable {
         if (node.value != defaultValue)
             children.plusAssign(node)
     }
-    fun print(depth: Int = 0) {
+    fun print(tab: String = "\t", depth: Int = 0) {
         for (i in 0 until depth)
-            print('\t')
+            kotlin.io.print(tab)
         println(value)
         val newDepth = depth + 1
         for (child in children)
-            child.print(newDepth)
+            child.print(tab, newDepth)
     }
 
     fun rewrite(rules: MatcherRules): Node {

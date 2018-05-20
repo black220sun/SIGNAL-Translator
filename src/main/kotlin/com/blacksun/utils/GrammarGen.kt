@@ -60,8 +60,9 @@ object GrammarGen {
     }
 
     private fun parse(name: String, rule: String, @Suppress("UNUSED_PARAMETER") void: Any): Node {
+        val startRule = if (rule.isBlank()) first else rule
         errors = 0
-        val node = GrammarGen[rule].parse()
+        val node = GrammarGen[startRule].parse()
         val lexerErrors = Lexer.getErrors()
         if (errors > 0 || lexerErrors > 0)
             println("$name parsed with errors: $lexerErrors lexer errors, $errors parser errors")

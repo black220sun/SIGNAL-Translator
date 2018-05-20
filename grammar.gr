@@ -1,4 +1,5 @@
-<signal-program> --> <program>;
+<signal-program> --> <program> |
+    <empty>;
 <program> -->
     PROGRAM <procedure-identifier> ; <block> . |
     PROCEDURE <procedure-identifier> <parameters-list> ; <block> ;;

@@ -173,6 +173,16 @@ class GrammarTest {
     }
     @Test
     fun testComments2() {
+        val file = File("res/testComments.txt")
+
+        val expected = GrammarGen.parse("", "<tail>")
+
+        val result = GrammarGen.parse(file, "<tail>")
+
+        assertEquals(expected, result)
+    }
+    @Test
+    fun testComments3() {
         val file = File("res/testComments2.txt")
         Lexer.init(file)
 

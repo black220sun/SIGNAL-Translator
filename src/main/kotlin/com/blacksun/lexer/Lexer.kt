@@ -3,10 +3,7 @@ package com.blacksun.lexer
 import com.blacksun.utils.GrammarGen
 import com.blacksun.utils.Node
 import com.blacksun.utils.Token
-import java.io.File
-import java.io.FileReader
-import java.io.Reader
-import java.io.StringReader
+import java.io.*
 
 object Lexer {
     private var row = 1
@@ -32,6 +29,7 @@ object Lexer {
     }
 
     private fun init() {
+        reader = BufferedReader(reader)
         row = 1
         col = 0
         noRead = false
@@ -64,6 +62,7 @@ object Lexer {
     fun skip() {
         while (read() in GrammarGen["skip"].first)
             noRead = false
+        hide()
     }
 
     fun error() {
@@ -83,7 +82,6 @@ object Lexer {
         GrammarGen.lexerRules.forEach {
             if (char in it.first) {
                 node = it.parse()
-                hide()
                 return node!!
             }
         }
@@ -91,7 +89,10 @@ object Lexer {
     }
 
     private fun hide() {
-        val tmp = Token(row, col, node!!.token.name)
+        val tmp = if (node is Node)
+            Token(row, col, node!!.token.name)
+        else
+            prepareToken()
         if (tmp.name() in GrammarGen["hide"].names) {
             val end = GrammarGen["show"].names[0]
             val len = tmp.name().length
@@ -102,11 +103,25 @@ object Lexer {
                 val name = tmp.name()
                 if (name.drop(len).endsWith(end)) {
                     node = null
+                    token = null
                     createTokenNode()
                     break
                 }
             }
+        } else if (node == null) {
+            reader.reset()
         }
+    }
+
+    private fun prepareToken(): Token {
+        val len = GrammarGen["hide"].names[0].length
+        val tmp = Token(row, col)
+        reader.mark(len)
+        for (i in 1..len) {
+            tmp += char
+            read()
+        }
+        return tmp
     }
 
     fun getTokenNode(): Node? {

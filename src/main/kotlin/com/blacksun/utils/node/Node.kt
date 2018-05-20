@@ -41,9 +41,12 @@ class Node(val value: Any = defaultValue): Cloneable {
         val nameExt = "?$name"
         val node = Node(value)
         node.children += children
-        return if (nameExt in rules)
-            rules[nameExt]!!(node)
-        else
+        return if (nameExt in rules) {
+            var tmp = node
+            val optimizations = rules[nameExt]!!
+            optimizations.forEach { tmp = it(tmp) }
+            tmp
+        } else
             node
     }
 

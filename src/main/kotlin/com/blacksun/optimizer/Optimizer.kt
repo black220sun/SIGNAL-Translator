@@ -18,7 +18,10 @@ class Optimizer {
 
     private fun computeRules(): MatcherRules {
         val rules = MatcherRules()
-        optimizations.forEach { rules[it.name] = it.optimization() }
+        optimizations.forEach {
+            val opt = it.optimization()
+            rules[it.name]?.plusAssign(opt) ?: rules.put(it.name, opt)
+        }
         return rules
     }
 }

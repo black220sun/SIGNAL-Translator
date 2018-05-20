@@ -1,4 +1,4 @@
 package com.blacksun.utils.node
 
-class MatcherRules: HashMap<String, (Node) -> Node>() {
+class MatcherRules: HashMap<String, ArrayList<(Node) -> Node>>() {
 }

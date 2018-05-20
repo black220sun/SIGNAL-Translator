@@ -16,7 +16,11 @@ class SignalGrammarTest {
         GrammarGen.initGrammar("grammar.gr")
 
         File("res").listFiles{ _, s -> s.endsWith(".sig") }.forEach {
-            GrammarGen.parse(it)
+            try {
+                GrammarGen.parse(it)
+            } catch (e: Exception) {
+                println(it.name)
+            }
         }
 
         System.setOut(old)

@@ -83,10 +83,30 @@ object Lexer {
         GrammarGen.lexerRules.forEach {
             if (char in it.first) {
                 node = it.parse()
+                hide()
                 return node!!
             }
         }
         return Node("error")
+    }
+
+    private fun hide() {
+        val tmp = Token(row, col, node!!.token.name)
+        if (tmp.name() in GrammarGen["hide"].names) {
+            val end = GrammarGen["show"].names[0]
+            val len = tmp.name().length
+            while (true) {
+                read()
+                tmp += char
+                noRead = false
+                val name = tmp.name()
+                if (name.drop(len).endsWith(end)) {
+                    node = null
+                    createTokenNode()
+                    break
+                }
+            }
+        }
     }
 
     fun getTokenNode(): Node? {

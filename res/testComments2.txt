@@ -1,0 +1,2 @@
+IF a(*abc*)THEN(*
+*)b

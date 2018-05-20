@@ -159,4 +159,38 @@ class GrammarTest {
 
         assertEquals(expected, result.toString())
     }
+    @Test
+    fun testComments() {
+        val file = File("res/testComments.txt")
+        Lexer.init(file)
+
+        val expected = Node("<tail>")
+        expected += Node("<empty>")
+
+        val result = GrammarGen["<tail>"].parse()
+
+        assertEquals(expected, result)
+    }
+    @Test
+    fun testComments2() {
+        val file = File("res/testComments2.txt")
+        Lexer.init(file)
+
+        val expected = """<if-stmt>
+	1	1	IF
+	<identifier>
+		1	4	a
+	1	12	THEN
+	<identifier>
+		2	3	b
+"""
+
+        val result = ByteArrayOutputStream()
+        val old = System.out
+        System.setOut(PrintStream(result))
+        GrammarGen["<if-stmt>"].parse().print()
+        System.setOut(old)
+
+        assertEquals(expected, result.toString())
+    }
 }

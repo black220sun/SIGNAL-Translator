@@ -6,6 +6,7 @@ class Token(
         private val builder: StringBuilder = StringBuilder()
 ) {
     val name by lazy(builder::toString)
+    fun name() = builder.toString()
 
     constructor(row: Int, col: Int, name: String) : this(row, col, StringBuilder(name))
 

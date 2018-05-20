@@ -115,3 +115,5 @@ part <letter> --> 'A'..'Z';
 part <string> --> <letter> <string> | <digit> <string> | ;
 part <digit> --> '0'..'9';
 skip --> 9 | 10 | 11 | 13 | 32;
+hide --> (*;
+show --> *);

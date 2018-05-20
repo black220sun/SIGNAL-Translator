@@ -18,7 +18,8 @@ class KeywordRule(name: String) : Rule(name) {
         if (token.name == name)
             Node(token)
         else {
-            Lexer.error()
+            GrammarGen.error()
+            println("Error: expected $name, found ${token.name}")
             Node()
         }
     }

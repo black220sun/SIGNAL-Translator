@@ -59,7 +59,7 @@ object GrammarGen {
         return parse(file.name, rule, 1)
     }
 
-    private fun parse(name: String, rule: String, void: Any): Node {
+    private fun parse(name: String, rule: String, @Suppress("UNUSED_PARAMETER") void: Any): Node {
         errors = 0
         val node = GrammarGen[rule].parse()
         val lexerErrors = Lexer.getErrors()

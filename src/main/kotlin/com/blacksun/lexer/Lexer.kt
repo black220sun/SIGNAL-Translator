@@ -15,6 +15,9 @@ object Lexer {
     private var node: Node? = null
     private lateinit var name: String
     private var errors = 0
+    private lateinit var save: Save
+
+    private data class Save(val row_: Int = row, val col_: Int = col, val char_: Int = char)
 
     fun init(text: String) {
         name = "input from string"
@@ -96,20 +99,17 @@ object Lexer {
         if (tmp.name() in GrammarGen["hide"].names) {
             val end = GrammarGen["show"].names[0]
             val len = tmp.name().length
-            while (true) {
+            do {
                 read()
                 tmp += char
                 noRead = false
-                val name = tmp.name()
-                if (name.drop(len).endsWith(end)) {
-                    node = null
-                    token = null
-                    createTokenNode()
-                    break
-                }
-            }
+            } while (!tmp.name().drop(len).endsWith(end))
         } else if (node == null) {
             reader.reset()
+            noRead = true
+            row = save.row_
+            col = save.col_
+            char = save.char_
         }
     }
 
@@ -117,9 +117,11 @@ object Lexer {
         val len = GrammarGen["hide"].names[0].length
         val tmp = Token(row, col)
         reader.mark(len)
+        save = Save()
         for (i in 1..len) {
-            tmp += char
             read()
+            tmp += char
+            noRead = false
         }
         return tmp
     }

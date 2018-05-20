@@ -93,7 +93,7 @@ object Lexer {
 
     private fun hide() {
         val tmp = if (node is Node)
-            Token(row, col, node!!.token.name)
+            Token(node!!.token.name)
         else
             prepareToken()
         if (tmp.name() in GrammarGen["hide"].names) {
@@ -115,7 +115,7 @@ object Lexer {
 
     private fun prepareToken(): Token {
         val len = GrammarGen["hide"].names[0].length
-        val tmp = Token(row, col)
+        val tmp = Token()
         reader.mark(len)
         save = Save()
         for (i in 1..len) {

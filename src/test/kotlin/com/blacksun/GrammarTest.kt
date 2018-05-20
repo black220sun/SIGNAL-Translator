@@ -187,12 +187,12 @@ class GrammarTest {
         Lexer.init(file)
 
         val expected = """<if-stmt>
-	1	1	IF
+	IF
 	<identifier>
-		1	4	a
-	1	12	THEN
+		a
+	THEN
 	<identifier>
-		2	3	b
+		b
 """
 
         val result = ByteArrayOutputStream()

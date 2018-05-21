@@ -206,12 +206,12 @@ class GrammarTest {
         val expected = """Error: unexpected symbol '￿' at input from string:1,12.
 Input from string parsed with errors: 1 lexer errors, 0 parser errors
 <if-stmt>
-	1	1	IF
+	IF
 	<identifier>
-		1	4	A
-	1	6	THEN
+		A
+	THEN
 	<identifier>
-		1	11	B
+		B
 """
 
         val result = ByteArrayOutputStream()

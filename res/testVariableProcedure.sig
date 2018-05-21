@@ -1,0 +1,8 @@
+PROGRAM TEST;
+BEGIN
+A := 10;
+"10" := 10;
+B[1] := 10;
+PR();
+PR(10, 15);
+END.

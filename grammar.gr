@@ -28,8 +28,7 @@
 <statements-list> --> <statement> <statements-list> | <empty>;
 <statement> -->
     <unsigned-integer> : <statement> |
-    <variable> := <expression> ; |
-    <procedure-identifier> <actual-arguments> ; |
+    <assign-or-procedure> ; |
     <condition-statement> ENDIF ; |
     WHILE <conditional-expression> DO <statements-list> ENDWHILE ; |
     LOOP <statements-list> ENDLOOP ; |
@@ -46,8 +45,8 @@
 <incomplete-condition-statement> --> IF <conditional-expression> THEN <statements-list>;
 <alternative-part> --> ELSE <statements-list> | <empty>;
 <loop-declaration> --> <expression> TO <expression> DO <statements-list>;
-<actual-arguments> --> ( <expression> <actual-arguments-list> ) | <empty>;
-<actual-arguments-list> --> ,<expression> <actual-arguments-list> | <empty>;
+<actual-arguments> --> ( <actual-arguments-list> );
+<actual-arguments-list> --> <expression> <expressions-list> | <empty>;
 <alternatives-list> --> <alternative> <alternatives-list> | <empty>;
 <alternative> --> <expression> : / <statements-list> \;
 <conditional-expression> --> <logical-summand> <logical>;
@@ -72,8 +71,9 @@
     ( <expression> ) |
     - <multiplier> |
     ^ <multiplier>;
-<variable> --> <variable-identifier> <variable-rest> | <complex-variable>;
-<variable-rest> --> <dimension> | <actual-arguments> | ;
+<assign-or-procedure> --> <identifier> <aop-rest> | <complex-variable> := <expression>;
+<aop-rest> --> <actual-arguments> | <dimension> := <expression>;
+<variable> --> <variable-identifier> <dimension> | <complex-variable>;
 <dimension> --> [ <expression> <expressions-list> ] | <empty>;
 <expressions-list> --> , <expression> <expressions-list> | <empty>;
 <empty> --> ;

@@ -1,6 +1,5 @@
 package com.blacksun
 
-import com.blacksun.utils.GrammarGen
 import org.junit.Assert
 import org.junit.Test
 import java.io.ByteArrayOutputStream

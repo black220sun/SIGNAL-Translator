@@ -1,6 +1,5 @@
-package com.blacksun.lexer
+package com.blacksun
 
-import com.blacksun.utils.GrammarGen
 import com.blacksun.utils.node.Node
 import com.blacksun.utils.Token
 import java.io.*

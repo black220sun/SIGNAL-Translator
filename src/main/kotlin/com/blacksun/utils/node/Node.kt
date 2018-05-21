@@ -1,6 +1,6 @@
 package com.blacksun.utils.node
 
-import com.blacksun.utils.GrammarGen
+import com.blacksun.GrammarGen
 import com.blacksun.utils.Token
 
 private const val defaultValue = "error"

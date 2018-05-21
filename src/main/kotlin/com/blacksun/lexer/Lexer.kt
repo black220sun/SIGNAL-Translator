@@ -99,11 +99,19 @@ object Lexer {
         if (tmp.name() in GrammarGen["hide"].names) {
             val end = GrammarGen["show"].names[0]
             val len = tmp.name().length
-            do {
+            while (true) {
                 read()
                 tmp += char
                 noRead = false
-            } while (!tmp.name().drop(len).endsWith(end))
+                if (char == -1) {
+                    row = save.row_
+                    col = save.col_
+                    error()
+                    break
+                }
+                if (tmp.name().drop(len).endsWith(end))
+                    break
+            }
         } else if (node == null) {
             reader.reset()
             noRead = true
@@ -114,7 +122,8 @@ object Lexer {
     }
 
     private fun prepareToken(): Token {
-        val len = GrammarGen["hide"].names[0].length
+        val name = GrammarGen["hide"].names[0]
+        val len = name.length
         val tmp = Token()
         reader.mark(len)
         save = Save()
@@ -122,6 +131,8 @@ object Lexer {
             read()
             tmp += char
             noRead = false
+            if (!name.startsWith(tmp.name()))
+                break
         }
         return tmp
     }
@@ -132,5 +143,11 @@ object Lexer {
         return tmp
     }
 
-    fun getErrors() = errors
+    fun getErrors(): Int {
+        if (char != -1) {
+            ++errors
+            println("Unparsed symbols left for $name")
+        }
+        return errors
+    }
 }

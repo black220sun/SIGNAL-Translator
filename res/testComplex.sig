@@ -8,6 +8,8 @@ C2 =			200;
 C3=300;
 COMP1 = '5,10';
 COMP2 = '5$EXP(20)';
+COMP3 = ' 5,   10';
+COMP4 = '5  $EXP( 20 )';
 
 BEGIN
 

@@ -64,7 +64,7 @@ object GrammarGen {
         val node = GrammarGen[startRule].parse()
         val lexerErrors = Lexer.getErrors()
         if (errors > 0 || lexerErrors > 0)
-            println("$name parsed with errors: $lexerErrors lexer errors, $errors parser errors")
+            System.err.println("$name parsed with errors: $lexerErrors lexer errors, $errors parser errors")
         return node
     }
 

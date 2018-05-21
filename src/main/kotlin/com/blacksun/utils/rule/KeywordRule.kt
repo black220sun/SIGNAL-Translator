@@ -19,7 +19,7 @@ class KeywordRule(name: String) : Rule(name) {
             Node(token)
         else {
             GrammarGen.error()
-            println("Error: expected $name, found ${token.name}")
+            System.err.println("Error ${Lexer.errorMsg()}: expected $name, found ${token.name}")
             Node()
         }
     }

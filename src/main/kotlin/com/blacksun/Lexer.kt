@@ -15,6 +15,7 @@ object Lexer {
     private lateinit var name: String
     private var errors = 0
     private lateinit var save: Save
+    private lateinit var errorMsg: String
 
     private data class Save(val row_: Int = row, val col_: Int = col, val char_: Int = char)
 
@@ -69,7 +70,7 @@ object Lexer {
 
     fun error() {
         ++errors
-        println("Error: unexpected symbol '${char.toChar()}' at $name:$row,$col.")
+        System.err.println("Error: unexpected symbol '${char.toChar()}' at $name:$row,$col.")
     }
 
     fun getToken(): Token {
@@ -81,6 +82,7 @@ object Lexer {
 
     fun createTokenNode(): Node {
         read()
+        errorMsg = "at $name:$row,$col"
         GrammarGen.lexerRules.forEach {
             if (char in it.first) {
                 node = it.parse()
@@ -106,7 +108,7 @@ object Lexer {
                     error()
                     row = save.row_
                     col = save.col_
-                    println("Unclosed comment at $name:$row,$col.")
+                    System.err.println("Unclosed comment at $name:$row,$col.")
                     break
                 }
                 if (tmp.name().drop(len).endsWith(end))
@@ -146,8 +148,10 @@ object Lexer {
     fun getErrors(): Int {
         if (char != -1) {
             ++errors
-            println("Unparsed symbols left for $name")
+            System.err.println("Unparsed symbols left for $name")
         }
         return errors
     }
+
+    fun errorMsg() = errorMsg
 }

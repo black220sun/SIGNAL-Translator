@@ -68,7 +68,7 @@ class RuleSet(private val name: String, val type: String, parts: String) {
     private fun error(node: Node?) {
         if (node is Node) {
             GrammarGen.error()
-            println("Error: expected $name, found ${node.token.name}")
+            System.err.println("Error ${Lexer.errorMsg()}: expected $name, found ${node.token.name}")
         } else
             Lexer.error()
     }

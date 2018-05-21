@@ -20,6 +20,8 @@ object MainFrame: JFrame("SIGNAL Translator"), WindowListener {
     private val panel = JSplitPane(JSplitPane.HORIZONTAL_SPLIT, inputPanel, OutputPanel())
     private val toolbar = Toolbar()
     private var root: Node? = null
+    private val out = ByteArrayOutputStream()
+    private val err = ByteArrayOutputStream()
     private var file: File? = {
         val tmp = Settings.getProperty("activeFile")
         if (tmp != null) {
@@ -30,6 +32,8 @@ object MainFrame: JFrame("SIGNAL Translator"), WindowListener {
     }()
 
     init {
+        System.setOut(PrintStream(out))
+        System.setErr(PrintStream(err))
         defaultCloseOperation = DO_NOTHING_ON_CLOSE
         addWindowListener(this)
         preferredSize = Dimension(1200, 800)
@@ -91,13 +95,12 @@ object MainFrame: JFrame("SIGNAL Translator"), WindowListener {
     fun process() {
         val rule = toolbar.getRule()
         root = GrammarGen.parse(inputPanel.textArea.text, rule)
+        error()
         panel.rightComponent = if (Settings.getForce("forcePrint")) {
-            val result = ByteArrayOutputStream()
-            val old = System.out
-            System.setOut(PrintStream(result))
             root!!.print("--")
-            System.setOut(old)
-            OutputPanel(result.toString())
+            val panel = OutputPanel(out.toString())
+            out.reset()
+            panel
         } else
             TreePanel(root!!)
     }
@@ -106,16 +109,23 @@ object MainFrame: JFrame("SIGNAL Translator"), WindowListener {
         val rule = toolbar.getRule()
         val node = root ?: GrammarGen.parse(inputPanel.textArea.text, rule)
         root = (Optimizer() + OptimizeEmpty()).process(node)
+        error()
         panel.rightComponent = if (Settings.getForce("forcePrint")) {
-            val result = ByteArrayOutputStream()
-            val old = System.out
-            System.setOut(PrintStream(result))
             root!!.print("--")
-            System.setOut(old)
-            OutputPanel(result.toString())
+            val panel = OutputPanel(out.toString())
+            out.reset()
+            panel
         } else
             TreePanel(root!!)
         root = null
+    }
+
+    private fun error() {
+        val errors = err.toString()
+        if (errors.isNotEmpty()) {
+            err.reset()
+            ErrorFrame(errors)
+        }
     }
 
     fun save() {

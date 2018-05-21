@@ -203,10 +203,7 @@ class GrammarTest {
     }
     @Test
     fun testComments4() {
-        val expected = """Error: unexpected symbol '￿' at input from string:1,14.
-Unclosed comment at input from string:1,12.
-Input from string parsed with errors: 1 lexer errors, 0 parser errors
-<if-stmt>
+        val expected = """<if-stmt>
 	IF
 	<identifier>
 		A
@@ -214,13 +211,22 @@ Input from string parsed with errors: 1 lexer errors, 0 parser errors
 	<identifier>
 		B
 """
+        val expected2 = """Error: unexpected symbol '￿' at input from string:1,14.
+Unclosed comment at input from string:1,12.
+Input from string parsed with errors: 1 lexer errors, 0 parser errors
+"""
 
         val result = ByteArrayOutputStream()
+        val err = ByteArrayOutputStream()
         val old = System.out
+        val oldErr = System.err
         System.setOut(PrintStream(result))
+        System.setErr(PrintStream(err))
         GrammarGen.parse("IF A THEN B(*", "<if-stmt>").print()
         System.setOut(old)
+        System.setErr(oldErr)
 
         assertEquals(expected, result.toString())
+        assertEquals(expected2, err.toString())
     }
 }

@@ -1,5 +1,6 @@
 package com.blacksun.utils.node
 
+import com.blacksun.utils.GrammarGen
 import com.blacksun.utils.Token
 
 private const val defaultValue = "error"
@@ -33,6 +34,19 @@ class Node(val value: Any = defaultValue): Cloneable {
         val newDepth = depth + 1
         for (child in children)
             child.print(newDepth)
+    }
+
+    fun template(pattern: String, rule: String, name: String): Node {
+        val node = GrammarGen.parse(pattern, rule)
+        val rules = MatcherRules()
+        val opt: (Node) -> Node = {
+            if (it.match(node).OK)
+                Node(name)
+            else
+                it
+        }
+        rules["?$rule"] = arrayListOf(opt)
+        return rewrite(rules)
     }
 
     fun rewrite(rules: MatcherRules): Node {

@@ -78,13 +78,13 @@
 <expressions-list> --> , <expression> <expressions-list> | <empty>;
 <empty> --> ;
 
-lexer <complex-variable> --> '"' <complex-number> '"';
-lexer <complex-constant> --> 39 <complex-number> 39;
+<complex-variable> --> " <complex-number> ";
+<complex-constant> --> <quote> <complex-number> <quote>;
 <unsigned-constant> --> <unsigned-number> | <unsigned-integer>;
 lexer <unsigned-integer> --> <u-int>;
-part <complex-number> --> <left-part> <right-part>;
-part <left-part> --> <u-int> | ;
-part <right-part> --> ',' <u-int> | <exp> '(' <u-int> ')' | ;
+<complex-number> --> <left-part> <right-part>;
+<left-part> --> <expression> | ;
+<right-part> --> , <expression> | <exp> ( <expression> ) | ;
 <constant-identifier> --> <identifier>;
 <variable-identifier> --> <identifier>;
 <procedure-identifier> --> <identifier>;
@@ -96,7 +96,8 @@ part <integer-part> --> <u-int> | ;
 lexer <fractional-part> --> # <sign> <u-i>;
 part <sign> --> + | - | ;
 lexer <delimiter> --> ';' | ',' | '=' | '+' | '-' | '[' | ']' |
-    '\' | '!' | '*' | '/' | '&' | '^' | '"' | '#' | ')' | 39;
+    '\' | '!' | '*' | '/' | '&' | '^' | '"' | '#' | ')';
+lexer <quote> --> 39;
 lexer <dot-dot?> --> '.' <dot?>;
 part <dot?> --> '.' | ;
 lexer <colon-equal?> --> ':' <equal?>;
@@ -107,7 +108,7 @@ lexer <less-any2?> --> '<' <any2?>;
 part <any2?> --> '=' | '>' | ;
 lexer <greater-any3?> --> '>' <any3?>;
 part <any3?> --> '=' | ;
-part <exp> --> '$' 'E' 'X' 'P';
+lexer <exp> --> '$' 'E' 'X' 'P';
 lexer <identifier> --> <letter> <string>;
 part <u-int> --> <digit> <digit-string>;
 part <digit-string> --> <digit> <digit-string> | ;

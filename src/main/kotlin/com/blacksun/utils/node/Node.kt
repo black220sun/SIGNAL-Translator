@@ -93,7 +93,7 @@ class Node(val value: Any = defaultValue): Cloneable {
 
     operator fun plusAssign(nodes: List<Node>) = children.plusAssign(nodes.filter { it.value != defaultValue })
 
-    override fun toString() = "Node($value)"
+    override fun toString() = value.toString()
 
     override fun equals(other: Any?): Boolean =
             when {
@@ -109,4 +109,7 @@ class Node(val value: Any = defaultValue): Cloneable {
         result = 31 * result + children.hashCode()
         return result
     }
+
+    operator fun get(index: Int) = children[index]
+    fun children() = children.size
 }

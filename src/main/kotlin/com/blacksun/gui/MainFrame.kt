@@ -5,28 +5,36 @@ import com.blacksun.optimizer.OptimizeEmpty
 import com.blacksun.optimizer.Optimizer
 import com.blacksun.settings.Settings
 import com.blacksun.utils.GrammarGen
+import com.blacksun.utils.node.Node
 import java.awt.Dimension
 import java.awt.event.WindowEvent
 import java.awt.event.WindowListener
-import java.io.ByteArrayOutputStream
-import java.io.FileReader
+import java.io.*
 import javax.swing.JFileChooser
 import javax.swing.JFrame
 import javax.swing.JOptionPane
 import javax.swing.JSplitPane
-import java.io.File
-import java.io.PrintStream
 
-object MainFrame: JFrame(), WindowListener {
+object MainFrame: JFrame("SIGNAL Translator"), WindowListener {
     private val inputPanel = InputPanel()
-    private val outputPanel = OutputPanel()
+    private val panel = JSplitPane(JSplitPane.HORIZONTAL_SPLIT, inputPanel, OutputPanel())
     private val toolbar = Toolbar()
+    private var root: Node? = null
+    private var file: File? = {
+        val tmp = Settings.getProperty("activeFile")
+        if (tmp != null) {
+            val file = File(tmp)
+            inputPanel.textArea.text = FileReader(file).readText()
+            file
+        } else null
+    }()
 
     init {
         defaultCloseOperation = DO_NOTHING_ON_CLOSE
         addWindowListener(this)
         preferredSize = Dimension(1200, 800)
-        val panel = JSplitPane(JSplitPane.HORIZONTAL_SPLIT, inputPanel, outputPanel)
+        panel.preferredSize = Dimension(1200, 700)
+        panel.resetToPreferredSizes()
         panel.isOneTouchExpandable = true
         contentPane = JSplitPane(JSplitPane.VERTICAL_SPLIT, toolbar, panel)
         isVisible = true
@@ -56,6 +64,8 @@ object MainFrame: JFrame(), WindowListener {
     }
 
     private fun quit() {
+        if (file != null)
+            Settings.setProperty("activeFile", file!!.absolutePath)
         Settings.save()
         Settings.saveLang()
         dispose()
@@ -64,7 +74,7 @@ object MainFrame: JFrame(), WindowListener {
     fun openFile() {
         val fileChooser = SFileChooser()
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            val file = fileChooser.getFile()
+            file = fileChooser.getFile()
             inputPanel.textArea.text = FileReader(file).readText()
         }
     }
@@ -80,30 +90,49 @@ object MainFrame: JFrame(), WindowListener {
 
     fun process() {
         val rule = toolbar.getRule()
-        val node = GrammarGen.parse(inputPanel.textArea.text, rule)
-
-        val result = ByteArrayOutputStream()
-        val old = System.out
-        System.setOut(PrintStream(result))
-
-        node.print("--")
-        outputPanel.textArea.text = result.toString()
-
-        System.setOut(old)
+        root = GrammarGen.parse(inputPanel.textArea.text, rule)
+        panel.rightComponent = if (Settings.getForce("forcePrint")) {
+            val result = ByteArrayOutputStream()
+            val old = System.out
+            System.setOut(PrintStream(result))
+            root!!.print("--")
+            System.setOut(old)
+            OutputPanel(result.toString())
+        } else
+            TreePanel(root!!)
     }
 
     fun optimize() {
         val rule = toolbar.getRule()
-        val node = GrammarGen.parse(inputPanel.textArea.text, rule)
-        val optimized = (Optimizer() + OptimizeEmpty()).process(node)
+        val node = root ?: GrammarGen.parse(inputPanel.textArea.text, rule)
+        root = (Optimizer() + OptimizeEmpty()).process(node)
+        panel.rightComponent = if (Settings.getForce("forcePrint")) {
+            val result = ByteArrayOutputStream()
+            val old = System.out
+            System.setOut(PrintStream(result))
+            root!!.print("--")
+            System.setOut(old)
+            OutputPanel(result.toString())
+        } else
+            TreePanel(root!!)
+        root = null
+    }
 
-        val result = ByteArrayOutputStream()
-        val old = System.out
-        System.setOut(PrintStream(result))
+    fun save() {
+        if (file == null) {
+            val fileChooser = SFileChooser()
+            if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                file = fileChooser.getFile()
+            } else
+                return
+        }
+        val writer = FileWriter(file)
+        writer.write(inputPanel.textArea.text)
+        writer.close()
+    }
 
-        optimized.print("--")
-        outputPanel.textArea.text = result.toString()
-
-        System.setOut(old)
+    fun closeFile() {
+        file = null
+        inputPanel.textArea.text = ""
     }
 }

@@ -12,5 +12,6 @@ class SFileChooser: JFileChooser() {
 
     init {
         currentDirectory = File(Settings.getProperty("fileDir") ?: ".")
+        isFileHidingEnabled = !Settings.showHidden()
     }
 }

@@ -4,9 +4,9 @@ import java.io.*
 import javax.swing.JOptionPane
 
 object Settings {
-    val separator = System.getProperty("file.separator")!!
-    const val csv = ","
-    val home = System.getProperty("user.home")!!
+    private val separator = System.getProperty("file.separator")!!
+    private const val csv = ","
+    private val home = System.getProperty("user.home")!!
     private val directory = "$home$separator.SIGNAL$separator"
     private val properties = HashMap<String, String>()
     private val settingsPath = directory + "settings"
@@ -47,7 +47,7 @@ object Settings {
                 .filter { it.matches("[^$csv]+$csv[^$csv]+".toRegex()) }
                 .forEach {
                     val parts = it.split(csv)
-                    table.put(parts[0], parts[1])
+                    table[parts[0]] = parts[1]
                 }
         reader.close()
     }
@@ -59,7 +59,7 @@ object Settings {
                 else
                     directory + filePath
         OutputStreamWriter(FileOutputStream(path), lang.defaultCharset).use {
-            table.forEach { key, value -> it.appendln("$key${csv}$value") }
+            table.forEach { key, value -> it.appendln("$key$csv$value") }
         }
     }
 

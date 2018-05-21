@@ -4,7 +4,7 @@ import com.blacksun.gui.util.SFileChooser
 import com.blacksun.optimizer.OptimizeEmpty
 import com.blacksun.optimizer.Optimizer
 import com.blacksun.settings.Settings
-import com.blacksun.utils.GrammarGen
+import com.blacksun.GrammarGen
 import com.blacksun.utils.node.Node
 import java.awt.Dimension
 import java.awt.event.WindowEvent

@@ -205,7 +205,7 @@ class GrammarTest {
     }
     @Test
     fun testComments4() {
-        val expected = """Error: unexpected symbol '￿' at input from string:1,14.
+        val expected = """Error: unexpected symbol '￿' at input from string:1,12.
 Input from string parsed with errors: 1 lexer errors, 0 parser errors
 <if-stmt>
 	1	1	IF

@@ -104,6 +104,8 @@ object Lexer {
                 tmp += char
                 noRead = false
                 if (char == -1) {
+                    row = save.row_
+                    col = save.col_
                     error()
                     break
                 }

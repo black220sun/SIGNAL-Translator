@@ -1,7 +1,5 @@
 package com.blacksun
 
-import com.blacksun.lexer.Lexer
-import com.blacksun.utils.GrammarGen
 import com.blacksun.utils.node.Node
 import com.blacksun.utils.Token
 import org.junit.Assert.assertEquals
@@ -199,6 +197,28 @@ class GrammarTest {
         val old = System.out
         System.setOut(PrintStream(result))
         GrammarGen["<if-stmt>"].parse().print()
+        System.setOut(old)
+
+        assertEquals(expected, result.toString())
+    }
+    @Test
+    fun testComments4() {
+        val expected = """Error: unexpected symbol '￿' at input from string:1,14.
+Unclosed comment at input from string:1,12.
+Input from string parsed with errors: 1 lexer errors, 0 parser errors
+<if-stmt>
+	IF
+	<identifier>
+		A
+	THEN
+	<identifier>
+		B
+"""
+
+        val result = ByteArrayOutputStream()
+        val old = System.out
+        System.setOut(PrintStream(result))
+        GrammarGen.parse("IF A THEN B(*", "<if-stmt>").print()
         System.setOut(old)
 
         assertEquals(expected, result.toString())

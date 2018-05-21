@@ -1,6 +1,5 @@
-package com.blacksun.utils
+package com.blacksun
 
-import com.blacksun.lexer.Lexer
 import com.blacksun.utils.node.Node
 import com.blacksun.utils.rule.RuleSet
 import java.io.File
@@ -21,7 +20,7 @@ object GrammarGen {
     fun initGrammar(file: File) {
         keywords_.clear()
         map.clear()
-        FileReader(file).forEachLine(::parseLine)
+        FileReader(file).forEachLine(GrammarGen::parseLine)
     }
 
     private fun parseLine(line: String) {
@@ -37,7 +36,7 @@ object GrammarGen {
         rule = StringBuilder()
         val (name, type) = parseParts(parts[0])
         map[name] = RuleSet(name, type, parts[1])
-        if (!::first.isInitialized)
+        if (!GrammarGen::first.isInitialized)
             first = name
     }
 

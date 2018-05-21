@@ -1,6 +1,6 @@
 package com.blacksun.optimizer
 
-import com.blacksun.utils.GrammarGen
+import com.blacksun.GrammarGen
 import com.blacksun.utils.node.Node
 
 class OptimizeEmpty : Optimization {

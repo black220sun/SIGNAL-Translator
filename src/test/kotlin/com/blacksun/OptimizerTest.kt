@@ -2,7 +2,6 @@ package com.blacksun
 
 import com.blacksun.optimizer.OptimizeEmpty
 import com.blacksun.optimizer.Optimizer
-import com.blacksun.utils.GrammarGen
 import org.junit.BeforeClass
 import org.junit.Test
 import kotlin.test.assertEquals

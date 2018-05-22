@@ -5,17 +5,18 @@ import com.blacksun.optimizer.OptimizeEmpty
 import com.blacksun.optimizer.Optimizer
 import com.blacksun.settings.Settings
 import com.blacksun.GrammarGen
+import com.blacksun.gui.util.LFrame
+import com.blacksun.optimizer.Optimization
 import com.blacksun.utils.node.Node
 import java.awt.Dimension
 import java.awt.event.WindowEvent
 import java.awt.event.WindowListener
 import java.io.*
 import javax.swing.JFileChooser
-import javax.swing.JFrame
 import javax.swing.JOptionPane
 import javax.swing.JSplitPane
 
-object MainFrame: JFrame("SIGNAL Translator"), WindowListener {
+object MainFrame: LFrame("SIGNAL Translator"), WindowListener {
     private val inputPanel = InputPanel()
     private val panel = JSplitPane(JSplitPane.HORIZONTAL_SPLIT, inputPanel, OutputPanel())
     private val toolbar = Toolbar()
@@ -108,7 +109,12 @@ object MainFrame: JFrame("SIGNAL Translator"), WindowListener {
     fun optimize() {
         val rule = toolbar.getRule()
         val node = root ?: GrammarGen.parse(inputPanel.textArea.text, rule)
-        root = (Optimizer() + OptimizeEmpty()).process(node)
+        val optimizer = Optimizer()
+        val optimizationNames = Settings.getProperties("forceOptimize.+")
+        optimizationNames.forEach {
+            optimizer += Class.forName("com.blacksun.optimizer." + it.drop(5)).newInstance() as Optimization
+        }
+        root = optimizer.process(node)
         error()
         panel.rightComponent = if (Settings.getForce("forcePrint")) {
             root!!.print("--")

@@ -69,9 +69,11 @@ object Lexer {
     }
 
     fun error() {
-        ++errors
         noRead = false
-        System.err.println("Error: unexpected symbol '${char.toChar()}' at $name:$row,$col.")
+        if (char != -1) {
+            ++errors
+            System.err.println("Error: unexpected symbol '${char.toChar()}' at $name:$row,$col.")
+        }
     }
 
     fun getToken(): Token {
@@ -110,6 +112,7 @@ object Lexer {
                     error()
                     row = save.row_
                     col = save.col_
+                    ++errors
                     System.err.println("Unclosed comment at $name:$row,$col.")
                     break
                 }

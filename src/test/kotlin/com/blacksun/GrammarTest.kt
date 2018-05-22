@@ -211,8 +211,7 @@ class GrammarTest {
 	<identifier>
 		B
 """
-        val expected2 = """Error: unexpected symbol '￿' at input from string:1,14.
-Unclosed comment at input from string:1,12.
+        val expected2 = """Unclosed comment at input from string:1,12.
 Input from string parsed with errors: 1 lexer errors, 0 parser errors
 """
 

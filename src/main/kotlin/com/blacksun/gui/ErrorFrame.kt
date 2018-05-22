@@ -1,10 +1,10 @@
 package com.blacksun.gui
 
-import javax.swing.JFrame
+import com.blacksun.gui.util.LFrame
 import javax.swing.JScrollPane
 import javax.swing.JTextArea
 
-class ErrorFrame(errors: String): JFrame("Error") {
+class ErrorFrame(errors: String): LFrame("Error") {
     init {
         val text = JTextArea(errors)
         text.isEditable = false

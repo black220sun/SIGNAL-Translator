@@ -93,4 +93,24 @@ class OptimizerTest {
 
         assertEquals(expected, result)
     }
+    @Test
+    fun testEmptyThen() {
+        val expected = GrammarGen.parse("""
+            PROGRAM EMPTY;
+            BEGIN
+            IF NOT [A = B] THEN B := 10; ENDIF;
+            END.
+        """.trimIndent())
+        val start = GrammarGen.parse("""
+            PROGRAM EMPTY;
+            BEGIN
+            IF A = B THEN ELSE B := 10; ENDIF;
+            END.
+        """.trimIndent())
+        val optimizer = Optimizer() + OptimizeEmptyThen()
+
+        val result = optimizer.process(start)
+
+        assertEquals(expected, result)
+    }
 }

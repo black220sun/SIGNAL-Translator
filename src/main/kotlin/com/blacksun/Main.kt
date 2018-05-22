@@ -2,9 +2,6 @@ package com.blacksun
 
 fun main(args: Array<String>) {
     GrammarGen.initGrammar("grammar.gr")
-    val node = GrammarGen.parse("PROGRAM TEST; BEGIN IF A=A THEN A:=10;ENDIF;END.")
+    val node = GrammarGen.parse("", "<alternative-part>")
     node.print()
-    val pattern = node.template("A=A;", "<conditional-expression>", "?cond-expr")
-    pattern.print()
-    node.match(pattern)["?cond-expr"]!!.print()
 }

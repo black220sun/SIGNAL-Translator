@@ -36,7 +36,7 @@ class Node(val value: Any = defaultValue): Cloneable {
             child.print(newDepth)
     }
 
-    fun template(pattern: String, rule: String, name: String): Node {
+    fun template(pattern: String, rule: String, name: String = "?$rule"): Node {
         val node = GrammarGen.parse(pattern, rule)
         val rules = MatcherRules()
         val opt: (Node) -> Node = {

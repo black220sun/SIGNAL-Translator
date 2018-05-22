@@ -3,12 +3,12 @@ package com.blacksun.optimizer
 import com.blacksun.GrammarGen
 import com.blacksun.utils.node.Node
 
-class OptimizeEmpty : Optimization {
+class OptimizeEmptyLoop : Optimization {
     override val name = "?<statements-list>"
 
     override fun optimization(): (Node) -> Node {
         val ruleNode = Node("<statements-list>") +
-                (Node("<statement>") + Node(";")) +
+                GrammarGen.parse("LOOP ENDLOOP;", "<statement>") +
                 Node("?rest")
         return {
             val result = it.match(ruleNode)

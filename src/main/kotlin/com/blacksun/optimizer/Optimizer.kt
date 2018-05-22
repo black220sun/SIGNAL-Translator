@@ -20,7 +20,7 @@ class Optimizer {
         val rules = MatcherRules()
         optimizations.forEach {
             val opt = it.optimization()
-            rules[it.name]?.plusAssign(opt) ?: rules.put(it.name, opt)
+            rules[it.name]?.plusAssign(opt) ?: rules.put(it.name, arrayListOf(opt))
         }
         return rules
     }

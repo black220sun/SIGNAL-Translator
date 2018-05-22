@@ -34,7 +34,7 @@
     WHILE <conditional-expression> DO <statements-list> ENDWHILE ; |
     LOOP <statements-list> ENDLOOP ; |
     FOR <variable-identifier> := <loop-declaration> ENDFOR ; |
-    CASE <expression> OF <alternatives- list> ENDCASE ; |
+    CASE <expression> OF <alternatives-list> ENDCASE ; |
     GOTO <unsigned-integer> ; |
     LINK <variable-identifier> , <unsigned-integer> ; |
     IN <unsigned-integer>; |

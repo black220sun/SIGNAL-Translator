@@ -133,4 +133,32 @@ class OptimizerTest {
 
         assertEquals(expected, result)
     }
+    @Test
+    fun testEmptyAlternative() {
+        val expected = GrammarGen.parse("""
+            PROGRAM EMPTY;
+            BEGIN
+            CASE 10 OF
+            11: /B:=1;\
+            13: /C:=2;\
+            ENDCASE;
+            END.
+        """.trimIndent())
+        val start = GrammarGen.parse("""
+            PROGRAM EMPTY;
+            BEGIN
+            CASE 10 OF
+            10: /\
+            11: /B:=1;\
+            12: /\
+            13: /C:=2;\
+            ENDCASE;
+            END.
+        """.trimIndent())
+        val optimizer = Optimizer() + OptimizeEmptyAlternative()
+
+        val result = optimizer.process(start)
+
+        assertEquals(expected, result)
+    }
 }

@@ -1,9 +1,6 @@
 package com.blacksun
 
-import com.blacksun.optimizer.OptimizeEmpty
-import com.blacksun.optimizer.OptimizeEmptyLoop
-import com.blacksun.optimizer.OptimizeEmptyWhile
-import com.blacksun.optimizer.Optimizer
+import com.blacksun.optimizer.*
 import org.junit.BeforeClass
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -71,6 +68,26 @@ class OptimizerTest {
             END.
         """.trimIndent())
         val optimizer = Optimizer() + OptimizeEmpty() + OptimizeEmptyLoop() + OptimizeEmptyWhile()
+
+        val result = optimizer.process(start)
+
+        assertEquals(expected, result)
+    }
+    @Test
+    fun testEmptyElse() {
+        val expected = GrammarGen.parse("""
+            PROGRAM EMPTY;
+            BEGIN
+            IF A = B THEN B := 10; ENDIF;
+            END.
+        """.trimIndent())
+        val start = GrammarGen.parse("""
+            PROGRAM EMPTY;
+            BEGIN
+            ;;;IF A = B THEN B := 10;;;; ELSE ;;;;; ENDIF;
+            END.
+        """.trimIndent())
+        val optimizer = Optimizer() + OptimizeEmpty() + OptimizeEmptyElse()
 
         val result = optimizer.process(start)
 

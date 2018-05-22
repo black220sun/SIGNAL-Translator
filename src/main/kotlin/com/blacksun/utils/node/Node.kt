@@ -3,9 +3,9 @@ package com.blacksun.utils.node
 import com.blacksun.GrammarGen
 import com.blacksun.utils.Token
 
-private const val defaultValue = "error"
+private const val DEFAULT_VALUE = ""
 
-class Node(val value: Any = defaultValue): Cloneable {
+class Node(val value: Any = DEFAULT_VALUE): Cloneable {
     private val children = ArrayList<Node>()
     val token: Token by lazy {
         when {
@@ -24,7 +24,7 @@ class Node(val value: Any = defaultValue): Cloneable {
         return this
     }
     operator fun plusAssign(node: Node) {
-        if (node.value != defaultValue)
+        if (node.value != DEFAULT_VALUE)
             children.plusAssign(node)
     }
     fun print(tab: String = "\t", depth: Int = 0) {
@@ -105,7 +105,7 @@ class Node(val value: Any = defaultValue): Cloneable {
             func(this)
     }
 
-    operator fun plusAssign(nodes: List<Node>) = children.plusAssign(nodes.filter { it.value != defaultValue })
+    operator fun plusAssign(nodes: List<Node>) = children.plusAssign(nodes.filter { it.value != DEFAULT_VALUE })
 
     override fun toString() = value.toString()
 

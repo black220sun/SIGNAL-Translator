@@ -19,7 +19,11 @@ class KeywordRule(name: String) : Rule(name) {
             Node(token)
         else {
             GrammarGen.error()
-            System.err.println("Error ${Lexer.errorMsg()}: expected $name, found ${token.name}")
+            val name1 = if (token.name.isBlank())
+                Lexer.char.toChar().toString()
+            else
+                token.name
+            System.err.println("Error ${Lexer.errorMsg()}: expected $name, found $name1")
             Node()
         }
     }

@@ -7,7 +7,7 @@ import java.io.*
 object Lexer {
     private var row = 1
     private var col = 0
-    private var char = 0
+    var char = 0
     private lateinit var reader: Reader
     private var noRead = false
     private var token: Token? = null
@@ -70,6 +70,7 @@ object Lexer {
 
     fun error() {
         ++errors
+        noRead = false
         System.err.println("Error: unexpected symbol '${char.toChar()}' at $name:$row,$col.")
     }
 
@@ -90,10 +91,7 @@ object Lexer {
             }
         }
         error()
-        return if (char == -1)
-            Node("error")
-        else
-            createTokenNode()
+        return Node()
     }
 
     private fun hide() {

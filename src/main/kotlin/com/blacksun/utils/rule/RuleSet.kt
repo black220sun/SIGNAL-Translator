@@ -2,6 +2,7 @@ package com.blacksun.utils.rule
 
 import com.blacksun.Lexer
 import com.blacksun.GrammarGen
+import com.blacksun.utils.Token
 import com.blacksun.utils.node.Node
 
 class RuleSet(private val name: String, val type: String, parts: String) {
@@ -68,7 +69,13 @@ class RuleSet(private val name: String, val type: String, parts: String) {
     private fun error(node: Node?) {
         if (node is Node) {
             GrammarGen.error()
-            System.err.println("Error ${Lexer.errorMsg()}: expected $name, found ${node.token.name}")
+            var name1 = if (node.value is String)
+                node.value
+            else
+                (node.value as Token).name
+            if (name1.isBlank())
+                name1 = Lexer.char.toChar().toString()
+            System.err.println("Error ${Lexer.errorMsg()}: expected $name, found $name1")
         } else
             Lexer.error()
     }

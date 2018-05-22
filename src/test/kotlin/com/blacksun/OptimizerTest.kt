@@ -1,6 +1,8 @@
 package com.blacksun
 
 import com.blacksun.optimizer.OptimizeEmpty
+import com.blacksun.optimizer.OptimizeEmptyLoop
+import com.blacksun.optimizer.OptimizeEmptyWhile
 import com.blacksun.optimizer.Optimizer
 import org.junit.BeforeClass
 import org.junit.Test
@@ -68,7 +70,7 @@ class OptimizerTest {
             WHILE A = 10 * 12 DO ;; ENDWHILE;
             END.
         """.trimIndent())
-        val optimizer = Optimizer() + OptimizeEmpty()
+        val optimizer = Optimizer() + OptimizeEmpty() + OptimizeEmptyLoop() + OptimizeEmptyWhile()
 
         val result = optimizer.process(start)
 

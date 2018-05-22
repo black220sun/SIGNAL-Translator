@@ -8,7 +8,7 @@ object Settings {
     private const val csv = ","
     private val home = System.getProperty("user.home")!!
     private val directory = "$home$separator.SIGNAL$separator"
-    private val properties = HashMap<String, String>()
+    private val properties = LinkedHashMap<String, String>()
     private val settingsPath = directory + "settings"
     private val lang = Language()
     private val force = Force()

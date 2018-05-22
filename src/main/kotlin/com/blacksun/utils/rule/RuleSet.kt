@@ -69,10 +69,7 @@ class RuleSet(private val name: String, val type: String, parts: String) {
     private fun error(node: Node?) {
         if (node is Node) {
             GrammarGen.error()
-            var name1 = if (node.value is String)
-                node.value
-            else
-                (node.value as Token).name
+            var name1 = node.token.name
             if (name1.isBlank())
                 name1 = Lexer.char.toChar().toString()
             System.err.println("Error ${Lexer.errorMsg()}: expected $name, found $name1")

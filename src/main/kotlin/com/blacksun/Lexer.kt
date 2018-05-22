@@ -89,7 +89,11 @@ object Lexer {
                 return node!!
             }
         }
-        return Node("error")
+        error()
+        return if (char == -1)
+            Node("error")
+        else
+            createTokenNode()
     }
 
     private fun hide() {

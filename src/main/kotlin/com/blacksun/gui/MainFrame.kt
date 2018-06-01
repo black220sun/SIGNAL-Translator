@@ -74,6 +74,7 @@ object MainFrame: LFrame("SIGNAL Translator"), WindowListener {
         Settings.save()
         Settings.saveLang()
         dispose()
+        System.exit(0)
     }
 
     fun openFile() {

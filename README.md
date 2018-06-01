@@ -207,7 +207,7 @@ lexer <quote> --> 39;
 ```
 
 ## Code optimizations
-Class `Optimizer` used for syntax tree rewrite and code optimizations. It contains set of used optimizations.  
+Class `Optimizer` is used for syntax tree rewrite and code optimizations. It contains set of used optimizations.  
 Currently supported optimizations:  
 - `OptimizeEmpty` - removes all `;` statements. Should preceed all `OptimizeEmpty*` optimizations.    
 - `OptimizeEmptyWhile` - removes all `WHILE <conditional-expression> DO ENDWHILE;` statements.  

@@ -115,6 +115,7 @@ object MainFrame: LFrame("SIGNAL Translator"), WindowListener {
             optimizer += Class.forName("com.blacksun.optimizer." + it.drop(5)).newInstance() as Optimization
         }
         root = optimizer.process(node)
+        root = optimizer.process(root!!)
         error()
         panel.rightComponent = if (Settings.getForce("forcePrint")) {
             root!!.print("--")

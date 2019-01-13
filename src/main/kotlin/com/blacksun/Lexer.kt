@@ -45,10 +45,13 @@ object Lexer {
     }
 
     fun read(): Int {
-        if (noRead)
+        if (noRead) {
+            Logger.info("Reading char. noRead = true, return $char [${char.toChar()}]")
             return char
+        }
         noRead = true
         char = reader.read()
+        Logger.info("Read new char: $char [${char.toChar()}]")
         if (char == '\n'.toInt()) {
             ++row
             col = 0
@@ -74,7 +77,7 @@ object Lexer {
         noRead = false
         if (char != -1) {
             ++errors
-            System.err.println("Error: unexpected symbol '${char.toChar()}' at $name:$row,$col.")
+            Logger.err("Error: unexpected symbol '${char.toChar()}' at $name:$row,$col.")
         }
     }
 
@@ -82,14 +85,17 @@ object Lexer {
         val tmp = token ?: error("")
         skip()
         token = null
+        Logger.info("Return $tmp")
         return tmp
     }
 
     fun createTokenNode(): Node {
+        Logger.info("Creating tokenNode")
         read()
         errorMsg = "at $name:$row,$col"
         GrammarGen.lexerRules.forEach {
             if (char in it.first) {
+                Logger.info("Char matched, parsing $it")
                 node = it.parse()
                 return node!!
             }
@@ -99,6 +105,7 @@ object Lexer {
     }
 
     private fun hide() {
+        Logger.info("Skipping comments")
         val tmp = if (node is Node)
             Token(node!!.token.name)
         else
@@ -115,7 +122,7 @@ object Lexer {
                     row = save.row_
                     col = save.col_
                     ++errors
-                    System.err.println("Unclosed comment at $name:$row,$col.")
+                    Logger.err("Unclosed comment at $name:$row,$col.")
                     break
                 }
                 if (tmp.name().drop(len).endsWith(end))
@@ -127,6 +134,7 @@ object Lexer {
     }
 
     private fun prepareToken(): Token {
+        Logger.info("Preparing token")
         val name = GrammarGen["hide"].names[0]
         val len = name.length
         val tmp = Token()
@@ -150,17 +158,19 @@ object Lexer {
     fun getErrors(): Int {
         if (char != -1) {
             ++errors
-            System.err.println("Unparsed symbols left for $name")
+            Logger.err("Unparsed symbols left for $name")
         }
         return errors
     }
 
     fun savepoint(length: Int) {
+        Logger.info("Creating savepoint for $length chars")
         reader.mark(length)
         save = Save()
     }
 
     fun rollback() {
+        Logger.info("Rollback to savepoint")
         noRead = true
         reader.reset()
         row = save.row_

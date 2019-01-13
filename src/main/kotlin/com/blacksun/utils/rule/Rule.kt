@@ -1,5 +1,6 @@
 package com.blacksun.utils.rule
 
+import com.blacksun.Logger
 import com.blacksun.utils.node.Node
 
 abstract class Rule(protected val name: String) {
@@ -23,6 +24,9 @@ abstract class Rule(protected val name: String) {
                 else -> KeywordRule(name)
             }
         private fun String.matches(regex: String): Boolean = matches(Regex(regex))
+    }
+    init {
+        Logger.info("Creating ${javaClass.simpleName} $name")
     }
     override fun toString() = name
 }

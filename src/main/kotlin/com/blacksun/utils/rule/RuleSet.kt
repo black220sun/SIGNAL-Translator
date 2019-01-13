@@ -2,7 +2,7 @@ package com.blacksun.utils.rule
 
 import com.blacksun.Lexer
 import com.blacksun.GrammarGen
-import com.blacksun.utils.Token
+import com.blacksun.Logger
 import com.blacksun.utils.node.Node
 
 class RuleSet(private val name: String, val type: String, parts: String) {
@@ -15,6 +15,7 @@ class RuleSet(private val name: String, val type: String, parts: String) {
     init {
         when (type) {
             "part" -> parse = {
+                Logger.info("Parsing [part] $name")
                 val char = Lexer.read()
                 var flag = true
                 for (rule in rules)
@@ -28,6 +29,7 @@ class RuleSet(private val name: String, val type: String, parts: String) {
                 Node()
             }
             "lexer" -> parse = {
+                Logger.info("Parsing [lexer] $name")
                 val tokenNode = Lexer.getTokenNode()
                 if (tokenNode is Node)
                     tokenNode
@@ -48,6 +50,7 @@ class RuleSet(private val name: String, val type: String, parts: String) {
                 }
             }
             else -> parse = {
+                Logger.info("Parsing $name")
                 val token = Lexer.createTokenNode()
                 val node = Node(name)
                 var flag = true
@@ -62,6 +65,7 @@ class RuleSet(private val name: String, val type: String, parts: String) {
                 node
             }
         }
+        Logger.info("Creating RuleSet $name" + if (type.isBlank()) "" else " [$type]")
         for (part in parts.split('|'))
             rules += RuleAlternative(part.trim())
     }

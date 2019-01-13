@@ -11,16 +11,18 @@ object GrammarGen {
     private var rule = StringBuilder()
     private lateinit var first: String
     val lexerRules by lazy { map.map { (_, r) -> r }.filter { it.type == "lexer" } }
-    private val keywords_ = HashMap<String, Boolean>()
-    private val keywords by lazy { keywords_.keys }
+    private val keywords = HashSet<String>()
     private var errors = 0
 
     fun initGrammar(path: String) = initGrammar(File(path))
 
     fun initGrammar(file: File) {
-        keywords_.clear()
+        keywords.clear()
         map.clear()
+        Logger.setOutput("grammar.log")
         FileReader(file).forEachLine(GrammarGen::parseLine)
+        map.values.forEach { it.first }
+        Logger.info("Grammar initialized")
     }
 
     private fun parseLine(line: String) {
@@ -49,11 +51,15 @@ object GrammarGen {
     fun print() = map.forEach { _, r -> println(r) }
 
     fun parse(text: String, rule: String = first): Node {
+        Logger.setOutput("parse.log")
+        Logger.info("Parsing input from string")
         Lexer.init(text)
         return parse("Input from string", rule, 1)
     }
 
     fun parse(file: File, rule: String = first): Node {
+        Logger.setOutput("${file.nameWithoutExtension}.log")
+        Logger.info("Parsing ${file.name}")
         Lexer.init(file)
         return parse(file.name, rule, 1)
     }
@@ -62,13 +68,14 @@ object GrammarGen {
         val startRule = if (rule.isBlank()) first else rule
         errors = 0
         val node = GrammarGen[startRule].parse()
+        Logger.info("Parse ended")
         val lexerErrors = Lexer.getErrors()
         if (errors > 0 || lexerErrors > 0)
-            System.err.println("$name parsed with errors: $lexerErrors lexer errors, $errors parser errors")
+            Logger.err("$name parsed with errors: $lexerErrors lexer errors, $errors parser errors")
         return node
     }
 
     fun isKeyword(name: String): Boolean = name in keywords
-    fun registerKeyword(name: String) = keywords_.put(name, true)
+    fun registerKeyword(name: String) = keywords.add(name)
     fun error() = ++errors
 }

@@ -2,8 +2,8 @@ package com.blacksun.utils.rule
 
 import com.blacksun.Lexer
 import com.blacksun.GrammarGen
-import com.blacksun.utils.Token
 import com.blacksun.utils.node.Node
+import java.util.logging.Logger
 
 class RuleSet(private val name: String, val type: String, parts: String) {
     private val rules = ArrayList<RuleAlternative>()
@@ -53,8 +53,19 @@ class RuleSet(private val name: String, val type: String, parts: String) {
                 var flag = true
                 for (rule in rules)
                     if (rule.check(token)) {
+                        val result = if (rule.rollback) {
+                            val err = GrammarGen.savepoint(1000)
+                            val resultOrError = rule.parse()
+                            if (GrammarGen.getErrors() != err) {
+                                GrammarGen.rollback(err)
+                                continue
+                            }
+                            resultOrError
+                        } else {
+                            rule.parse()
+                        }
+                        node += result
                         flag = false
-                        node += rule.parse()
                         break
                     }
                 if (flag)
@@ -69,18 +80,30 @@ class RuleSet(private val name: String, val type: String, parts: String) {
     private fun error(node: Node?) {
         if (node is Node) {
             GrammarGen.error()
-            var name1 = node.token.name
-            if (name1.isBlank())
-                name1 = Lexer.char.toChar().toString()
-            System.err.println("Error ${Lexer.errorMsg()}: expected $name, found $name1")
+            var tokenName = node.token.name
+            if (tokenName.isBlank())
+                tokenName = Lexer.char.toChar().toString()
+            System.err.println("Error ${Lexer.errorMsg()}: expected $name, found $tokenName")
         } else
             Lexer.error()
     }
 
     private fun computeFirst(): ArrayList<Int> {
         val first = ArrayList<Int>()
-        for (rule in rules)
-            first += rule.first
+        for (alternative in rules) {
+            first += alternative.first
+            // if any pair or alternatives has the same first token (not LL(1)) -
+            // mark as rollback-needed
+            for (rule in rules) {
+                if (rule == alternative)
+                    continue
+                if (rule.first.any { it in alternative.first }) {
+                    Logger.getGlobal().info("rollback for $rule and $alternative")
+                    rule.rollback = true
+                    alternative.rollback = true
+                }
+            }
+        }
         return first
     }
 

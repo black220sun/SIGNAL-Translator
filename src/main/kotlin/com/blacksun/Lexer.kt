@@ -17,7 +17,9 @@ object Lexer {
     private lateinit var save: Save
     private lateinit var errorMsg: String
 
-    private data class Save(val row_: Int = row, val col_: Int = col, val char_: Int = char)
+    private data class Save(
+            val row_: Int = row, val col_: Int = col,
+            val char_: Int = char, val err: Int = errors)
 
     fun init(text: String) {
         name = "input from string"
@@ -120,11 +122,7 @@ object Lexer {
                     break
             }
         } else if (node == null) {
-            reader.reset()
-            noRead = true
-            row = save.row_
-            col = save.col_
-            char = save.char_
+            rollback()
         }
     }
 
@@ -132,8 +130,7 @@ object Lexer {
         val name = GrammarGen["hide"].names[0]
         val len = name.length
         val tmp = Token()
-        reader.mark(len)
-        save = Save()
+        savepoint(len)
         for (i in 1..len) {
             read()
             tmp += char
@@ -156,6 +153,20 @@ object Lexer {
             System.err.println("Unparsed symbols left for $name")
         }
         return errors
+    }
+
+    fun savepoint(length: Int) {
+        reader.mark(length)
+        save = Save()
+    }
+
+    fun rollback() {
+        noRead = true
+        reader.reset()
+        row = save.row_
+        col = save.col_
+        char = save.char_
+        errors = save.err
     }
 
     fun errorMsg() = errorMsg

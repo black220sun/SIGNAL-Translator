@@ -21,6 +21,7 @@ object GrammarGen {
         keywords_.clear()
         map.clear()
         FileReader(file).forEachLine(GrammarGen::parseLine)
+        map.values.forEach { it.first }
     }
 
     private fun parseLine(line: String) {
@@ -71,4 +72,13 @@ object GrammarGen {
     fun isKeyword(name: String): Boolean = name in keywords
     fun registerKeyword(name: String) = keywords_.put(name, true)
     fun error() = ++errors
+    fun getErrors(): Int = errors
+    fun savepoint(length: Int): Int {
+        Lexer.savepoint(length)
+        return errors
+    }
+    fun rollback(errors: Int) {
+        Lexer.rollback()
+        this.errors = errors
+    }
 }

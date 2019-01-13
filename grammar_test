@@ -20,3 +20,7 @@ part <colon-tail> --> '=' | ;
 <delimiters> --> <delimiter> <delimiter-list>;
 <delimiter-list> --> <delimiter> <delimiter-list> | <empty>;
 <if-stmt> --> IF <identifier> THEN <identifier>;
+<ll-test> --> <ll1> | <ll2> | <empty>;
+<ll1> --> <identifier> LL1 | <delimiter>;
+<ll2> --> '0' | <identifier> <ll3>;
+<ll3> --> LL2 | <empty>;

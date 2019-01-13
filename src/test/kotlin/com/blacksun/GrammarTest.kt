@@ -228,4 +228,24 @@ Input from string parsed with errors: 1 lexer errors, 0 parser errors
         assertEquals(expected, result.toString())
         assertEquals(expected2, err.toString())
     }
+    @Test
+    fun testRollback() {
+        val file = File("res/testRollback.txt")
+        Lexer.init(file)
+
+        val expected = """<ll-test>
+    <ll2>
+	    <identifier>
+		    AA
+        LL2
+"""
+
+        val result = ByteArrayOutputStream()
+        val old = System.out
+        System.setOut(PrintStream(result))
+        GrammarGen["<ll-test>"].parse().print()
+        System.setOut(old)
+
+        assertEquals(expected, result.toString())
+    }
 }

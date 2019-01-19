@@ -60,7 +60,7 @@ class RuleSet(private val name: String, val type: String, parts: String) {
                             val err = GrammarGen.savepoint(1000)
                             val resultOrError = rule.parse()
                             if (GrammarGen.getErrors() != err) {
-                                GrammarGen.rollback(err)
+                                GrammarGen.rollback(err, token)
                                 continue
                             }
                             resultOrError

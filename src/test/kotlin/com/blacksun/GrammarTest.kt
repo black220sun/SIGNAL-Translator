@@ -229,15 +229,16 @@ Input from string parsed with errors: 1 lexer errors, 0 parser errors
         assertEquals(expected2, err.toString())
     }
     @Test
-    fun testRollback() {
+    fun testRollback() { //TODO(remove error msg)
         val file = File("res/testRollback.txt")
         Lexer.init(file)
 
         val expected = """<ll-test>
-    <ll2>
-	    <identifier>
-		    AA
-        LL2
+	<ll2>
+		<identifier>
+			AA
+		<ll3>
+			LL2
 """
 
         val result = ByteArrayOutputStream()

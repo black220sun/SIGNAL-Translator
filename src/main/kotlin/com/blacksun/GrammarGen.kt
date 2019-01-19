@@ -80,11 +80,11 @@ object GrammarGen {
     fun error() = ++errors
     fun getErrors(): Int = errors
     fun savepoint(length: Int): Int {
-        Lexer.savepoint(length)
+        Lexer.savepoint(length, true)
         return errors
     }
-    fun rollback(errors: Int) {
-        Lexer.rollback()
+    fun rollback(errors: Int, token: Node) {
+        Lexer.rollback(token, true)
         this.errors = errors
     }
 }

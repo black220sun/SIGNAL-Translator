@@ -10,6 +10,7 @@ object Lexer {
     var char = 0
     private lateinit var reader: Reader
     private var noRead = false
+    private var marked = false
     private var token: Token? = null
     private var node: Node? = null
     private lateinit var name: String
@@ -128,8 +129,9 @@ object Lexer {
                 if (tmp.name().drop(len).endsWith(end))
                     break
             }
+            marked = false
         } else if (node == null) {
-            rollback()
+            rollback(null)
         }
     }
 
@@ -163,20 +165,32 @@ object Lexer {
         return errors
     }
 
-    fun savepoint(length: Int) {
-        Logger.info("Creating savepoint for $length chars")
-        reader.mark(length)
-        save = Save()
+    fun savepoint(length: Int, force: Boolean = false) {
+        if (marked && !force) {
+            Logger.warn("Reader already marked, skipping creating savepoint")
+        } else {
+            Logger.info("Creating savepoint for $length chars at [$row, $col] = $char (${char.toChar()})")
+            reader.mark(length)
+            if (force)
+                marked = true
+            save = Save()
+        }
+
     }
 
-    fun rollback() {
-        Logger.info("Rollback to savepoint")
-        noRead = true
-        reader.reset()
-        row = save.row_
-        col = save.col_
-        char = save.char_
-        errors = save.err
+    fun rollback(token: Node?, force: Boolean = false) {
+        if (!marked || force) {
+            node = token
+            noRead = true
+            reader.reset()
+            noRead = true
+            row = save.row_
+            col = save.col_
+            char = save.char_
+            errors = save.err
+            marked = false
+            Logger.info("Rollback to savepoint at [$row, $col] = $char (${char.toChar()})")
+        }
     }
 
     fun errorMsg() = errorMsg

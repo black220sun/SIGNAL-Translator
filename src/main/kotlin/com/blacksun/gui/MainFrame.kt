@@ -1,7 +1,6 @@
 package com.blacksun.gui
 
 import com.blacksun.gui.util.SFileChooser
-import com.blacksun.optimizer.OptimizeEmpty
 import com.blacksun.optimizer.Optimizer
 import com.blacksun.settings.Settings
 import com.blacksun.GrammarGen

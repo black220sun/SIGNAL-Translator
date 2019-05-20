@@ -8,14 +8,14 @@ _`grammar.gr`_ - SIGNAL grammar file (reworked).
 _`res`_ - directory for test files. `*.txt` files use grammar from `grammar_test` file, 
 `*.sig` files use grammar from `grammar.gr` file.  
 _`src`_ - source files directory.  
-_`src/test/kotlin/com/blacksun`_ - containes testcases. `GrammarTest.kt` - general tests for grammar generation, 
+_`src/test/kotlin/com/blacksun`_ - contains testcases. `GrammarTest.kt` - general tests for grammar generation, 
 `SignalGrammarTest.kt` - to run all `*.sig` files from `res` directory and ensure that there is no errors, 
 `OptimizerTest.kt` - tests for SIGNAL code optimizations.  
 _`src/main/kotlin/com/blacksun`_ - main source directory.  
-- _`gui`_ - containes GUI classes.  
-- _`settings`_ - containes classes for program's state save/load and multi-language GUI support.  
-- _`optimizer`_ - containes implementation for SIGNAL code optimizations. 
-All oplimizations should implement `Optimization` interface and be names as `Optimize*` (for easy importing from GUI).  
+- _`gui`_ - contains GUI classes.  
+- _`settings`_ - contains classes for program's state save/load and multi-language GUI support.  
+- _`optimizer`_ - contains implementation for SIGNAL code optimizations. 
+All optimizations should implement `Optimization` interface and be names as `Optimize*` (for easy importing from GUI).  
 - _`utils`_ - contains utility classes for tokens, nodes, pattern matching and grammar rules implementation.  
 - _`GrammarGen.kt`_ - processes grammar, implements parser part.  
 - _`Lexer.kt`_ - implements lexer part.  
@@ -209,11 +209,11 @@ lexer <quote> --> 39;
 ## Code optimizations
 Class `Optimizer` is used for syntax tree rewrite and code optimizations. It contains set of used optimizations.  
 Currently supported optimizations:  
-- `OptimizeEmpty` - removes all `;` statements. Should preceed all `OptimizeEmpty*` optimizations.    
+- `OptimizeEmpty` - removes all `;` statements. Should precede all `OptimizeEmpty*` optimizations.    
 - `OptimizeEmptyWhile` - removes all `WHILE <conditional-expression> DO ENDWHILE;` statements.  
 - `OptimizeEmptyLoop` -removes all `LOOP ENDLOOP;` statements.  
-- `OptimizeEmptyAlternative` - removes all `<expression>: /\` case alternatives. Should preceed `OptimizeEmptyCase`.  
+- `OptimizeEmptyAlternative` - removes all `<expression>: /\` case alternatives. Should precede `OptimizeEmptyCase`.  
 - `OptimizeEmptyCase` - removes all `CASE <expression> OF ENDCASE;` statements.  
-- `OptimizeEmptyElse` - removes all empty `ELSE` branches for `IF`-statements. Should preceed `OptimizeEmptyThen`.  
-- `OptimizeEmptyThen` - reverts condition for `IF` statement with empty `THEN` part, then removes empty branch. Should preceed `OptimizeEmptyIf`.  
+- `OptimizeEmptyElse` - removes all empty `ELSE` branches for `IF`-statements. Should precede `OptimizeEmptyThen`.  
+- `OptimizeEmptyThen` - reverts condition for `IF` statement with empty `THEN` part, then removes empty branch. Should precede `OptimizeEmptyIf`.  
 - `OptimizeEmptyIf` - removes all `IF <conditional-expression> THEN ENDIF;` statements.  

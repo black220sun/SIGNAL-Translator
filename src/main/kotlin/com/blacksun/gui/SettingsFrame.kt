@@ -2,6 +2,8 @@ package com.blacksun.gui
 
 import com.blacksun.gui.util.ForceCheckBox as F
 import com.blacksun.gui.util.LFrame
+import com.blacksun.gui.util.LLangChooser
+import com.blacksun.settings.Settings
 import javax.swing.BoxLayout
 import javax.swing.JLabel
 import javax.swing.JPanel
@@ -12,6 +14,9 @@ class SettingsFrame: LFrame("Settings") {
         val panel = JPanel()
         contentPane = JScrollPane(panel)
         panel.layout = BoxLayout(panel, BoxLayout.Y_AXIS)
+
+        panel.add(JLabel(Settings.getLang("Language:")))
+        panel.add(LLangChooser())
 
         panel.add(F("Quit"))
         panel.add(F("Print"))

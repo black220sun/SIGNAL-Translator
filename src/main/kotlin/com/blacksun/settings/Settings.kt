@@ -13,7 +13,7 @@ object Settings {
     private val lang = Language()
     private val force = Force()
     val resources = directory + "res" + separator
-    val defaultCharset = lang.defaultCharset
+    private val defaultCharset = lang.defaultCharset
     init {
         val dir = File(directory)
         if (dir.isFile) {
@@ -82,5 +82,5 @@ object Settings {
     fun setForce(key: String, value: Boolean) = force.setMode(key, value)
     fun getProperties(pattern: String) =
             properties.filter { it.key.matches(Regex(pattern)) }.map { it.key }
-    fun showHidden(): Boolean = properties.getOrPut("showHidden", {"false"}).toBoolean()
+    fun showHidden(): Boolean = properties.getOrPut("showHidden") {"false"}.toBoolean()
 }

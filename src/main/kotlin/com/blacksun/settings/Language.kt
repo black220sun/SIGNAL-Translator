@@ -7,7 +7,7 @@ class Language {
     val defaultCharset = Charsets.UTF_8
 
     init {
-        languages.put(defaultLang, defaultLang)
+        languages[defaultLang] = defaultLang
     }
 
     fun initLang(langPath: String) {
@@ -23,7 +23,7 @@ class Language {
         Settings.loadFile(path, this.lang)
     }
 
-    fun getLang(key: String): String = lang.getOrPut(key, {key})
+    fun getLang(key: String): String = lang.getOrPut(key) {key}
 
     fun saveLang() {
         val langName = Settings.getProperty("langActive")

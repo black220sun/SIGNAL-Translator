@@ -51,20 +51,20 @@ object GrammarGen {
     fun print() = map.forEach { _, r -> println(r) }
 
     fun parse(text: String, rule: String = first): Node {
-        Logger.setOutput("parse.log")
+        Logger.setOutput("parseAux.log")
         Logger.info("Parsing input from string")
         Lexer.init(text)
-        return parse("Input from string", rule, 1)
+        return parseAux("Input from string", rule)
     }
 
     fun parse(file: File, rule: String = first): Node {
         Logger.setOutput("${file.nameWithoutExtension}.log")
         Logger.info("Parsing ${file.name}")
         Lexer.init(file)
-        return parse(file.name, rule, 1)
+        return parseAux(file.name, rule)
     }
 
-    private fun parse(name: String, rule: String, @Suppress("UNUSED_PARAMETER") void: Any): Node {
+    private fun parseAux(name: String, rule: String): Node {
         val startRule = if (rule.isBlank()) first else rule
         errors = 0
         val node = GrammarGen[startRule].parse()

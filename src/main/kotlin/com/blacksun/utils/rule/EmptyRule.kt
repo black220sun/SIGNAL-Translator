@@ -8,7 +8,7 @@ class EmptyRule : Rule("") {
     override val empty = true
     override val parse = {
         Logger.info("Parsing EmptyRule")
-        Lexer.skip();
+        Lexer.skip()
         Node() }
     override val computeFirst = {
         Logger.info("$name first computed as emptyList")

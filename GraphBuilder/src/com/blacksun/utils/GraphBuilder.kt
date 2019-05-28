@@ -14,6 +14,7 @@ class GraphBuilder {
         var ignoredUsages = emptyList<String>()
         var text: String = ""
         var clusterize = false
+        var simplifyNames = false
     }
 
     fun withDelimiter(delimiter: String): GraphBuilder {
@@ -51,13 +52,18 @@ class GraphBuilder {
         return this
     }
 
+    fun withSimpleNames(value: Boolean = true): GraphBuilder {
+        context.simplifyNames = value
+        return this
+    }
+
     fun xmlToDot(filename: String) = xmlToDot(File(filename))
 
     fun xmlToDot(file: File): GraphBuilder {
         var filename = ""
         val nodesMap = HashMap<String, String>()
         var nodeCounter = 0
-        var usedNodes = ArrayList<String>()
+        val usedNodes = ArrayList<String>()
         val dependencies = ArrayList<String>()
 
         fun newNode(path: String) {
@@ -65,7 +71,7 @@ class GraphBuilder {
                 nodesMap[path] = "node${nodeCounter++}"
                 builder.append(nodesMap[path])
                         .append(" [label=\"")
-                        .append(path.replace(context.delimiter, "."))
+                        .append(simplifyName(path.replace(context.delimiter, ".")))
                         .appendln("\", shape=box];")
 
             }
@@ -107,6 +113,13 @@ class GraphBuilder {
         }
         builder.append(context.text).appendln("}")
         return this
+    }
+
+    private fun simplifyName(name: String): String {
+        if (! context.simplifyNames) {
+            return name
+        }
+        return name.substring(name.lastIndexOf(".") + 1)
     }
 
     private fun clusterize(builder: StringBuilder, nodesMap: HashMap<String, String>) {
@@ -165,19 +178,18 @@ fun main() {
             .withIgnoredUsages(
                     "\$USER_HOME\$/Downloads/jdk1.8.0_181/jdk1.8.0_181/src.zip!/",
                     "\$MAVEN_REPOSITORY\$/org/jetbrains/kotlin/kotlin-stdlib/1.2.41/kotlin-stdlib-1.2.41.jar!/",
-                    "com/blacksun/Logger", "com/blacksun/utils/node",
-                    "com/blacksun/utils/rule", "com/blacksun/utils/Token"
+                    "com/blacksun/Logger",
+                    "com/blacksun/Main",  "com/blacksun/optimizer",
+                    "com/blacksun/settings"
             )
             .withIgnoredPackages(
-                    "com/blacksun/gui", "com/blacksun/optimizer",
-                    "com/blacksun/Main", "com/blacksun/settings",
-                    "com/blacksun/utils/node", "com/blacksun/Logger"
+                    "com/blacksun/Logger", "com/blacksun/GrammarGen",
+                    "com/blacksun/Main", "com/blacksun/Lexer",
+                    "com/blacksun/utils", "com/blacksun/optimizer",
+                    "com/blacksun/settings"
             )
-            .withAdditionalFormatting("node1 -> node9 -> node8 -> node7;\n" +
-                    "node7 -> { node2 node3 node4 node5 node6 };\n" +
-                    "node3 -> node10;\n" +
-                    "node6 -> node10;")
-            .withClustering()
+            //.withClustering()
+            .withSimpleNames()
             .xmlToDot("graph.xml")
             .print()
             .toFile("graph.dot")

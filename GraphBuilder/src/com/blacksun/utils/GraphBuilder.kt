@@ -8,13 +8,37 @@ class GraphBuilder {
 
     class GraphBuilderContext {
         var delimiter = "/"
-        var ignoredPrefixes = emptyList<String>()
-        var ignoredSuffixes = emptyList<String>()
-        var ignoredPackages = emptyList<String>()
-        var ignoredUsages = emptyList<String>()
+        val ignoredPrefixes = ArrayList<String>()
+        val ignoredSuffixes = ArrayList<String>()
+        val ignoredPackages = ArrayList<String>()
+        val ignoredUsages = ArrayList<String>()
+        val interestingPackages = ArrayList<String>()
+        val interestingUsages = ArrayList<String>()
         var text: String = ""
         var clusterize = false
         var simplifyNames = false
+
+        fun isInterestingUser(path: String): Boolean {
+            if (interestingPackages.isNotEmpty()) {
+                return specified(interestingPackages, path)
+            }
+            return notSpecified(ignoredPackages, path)
+        }
+
+        fun isInterestingUsage(path: String): Boolean {
+            if (interestingUsages.isNotEmpty()) {
+                return specified(interestingUsages, path)
+            }
+            return notSpecified(ignoredUsages, path) && notSpecified(ignoredPackages, path)
+        }
+
+        private fun specified(where: Collection<String>, what: String): Boolean {
+            return where.any { what.startsWith(it) }
+        }
+
+        private fun notSpecified(where: Collection<String>, what: String): Boolean {
+            return where.none { what.startsWith(it) }
+        }
     }
 
     fun withDelimiter(delimiter: String): GraphBuilder {
@@ -23,22 +47,38 @@ class GraphBuilder {
     }
 
     fun withIgnoredPrefixes(vararg prefixes: String): GraphBuilder {
-        context.ignoredPrefixes = prefixes.asList()
+        context.ignoredPrefixes.clear()
+        context.ignoredPrefixes.addAll(prefixes)
         return this
     }
 
     fun withIgnoredSuffixes(vararg suffixes: String): GraphBuilder {
-        context.ignoredSuffixes = suffixes.asList()
+        context.ignoredSuffixes.clear()
+        context.ignoredSuffixes.addAll(suffixes)
         return this
     }
 
     fun withIgnoredPackages(vararg packages: String): GraphBuilder {
-        context.ignoredPackages = packages.asList()
+        context.ignoredPackages.clear()
+        context.ignoredPackages.addAll(packages)
         return this
     }
 
     fun withIgnoredUsages(vararg usages: String): GraphBuilder {
-        context.ignoredUsages = usages.asList()
+        context.ignoredUsages.clear()
+        context.ignoredUsages.addAll(usages)
+        return this
+    }
+
+    fun withInterestingPackages(vararg packages: String): GraphBuilder {
+        context.interestingPackages.clear()
+        context.interestingPackages.addAll(packages)
+        return this
+    }
+
+    fun withInterestingUsages(vararg usages: String): GraphBuilder {
+        context.interestingUsages.clear()
+        context.interestingUsages.addAll(usages)
         return this
     }
 
@@ -82,7 +122,7 @@ class GraphBuilder {
             val line = it.trim()
             if (line.startsWith("<file ")) {
                 val path = lineToPath(line)
-                if (context.ignoredPackages.none { path.startsWith(it) }) {
+                if (context.isInterestingUser(path)) {
                     filename = path
                     newNode(path)
                 } else {
@@ -90,7 +130,7 @@ class GraphBuilder {
                 }
             } else if (line.startsWith("<dependency ") && filename.isNotEmpty()) {
                 val path = lineToPath(line)
-                if (context.ignoredUsages.none { path.startsWith(it) }) {
+                if (context.isInterestingUsage(path)) {
                     newNode(path)
                     if (! usedNodes.contains(path)) {
                         dependencies.add(nodesMap[path]!!)
@@ -177,18 +217,12 @@ fun main() {
             .withIgnoredSuffixes(".kt", ".java", ".class")
             .withIgnoredUsages(
                     "\$USER_HOME\$/Downloads/jdk1.8.0_181/jdk1.8.0_181/src.zip!/",
-                    "\$MAVEN_REPOSITORY\$/org/jetbrains/kotlin/kotlin-stdlib/1.2.41/kotlin-stdlib-1.2.41.jar!/",
-                    "com/blacksun/Logger",
-                    "com/blacksun/Main",  "com/blacksun/optimizer",
-                    "com/blacksun/settings"
+                    "\$MAVEN_REPOSITORY\$/org/jetbrains/kotlin/kotlin-stdlib/1.2.41/kotlin-stdlib-1.2.41.jar!/"
             )
-            .withIgnoredPackages(
-                    "com/blacksun/Logger", "com/blacksun/GrammarGen",
-                    "com/blacksun/Main", "com/blacksun/Lexer",
-                    "com/blacksun/utils", "com/blacksun/optimizer",
-                    "com/blacksun/settings"
-            )
+            .withInterestingPackages("com/blacksun/utils/rule")
+            .withInterestingUsages("com/blacksun/utils/rule", "com/blacksun/GrammarGen")
             //.withClustering()
+            .withAdditionalFormatting("node6 -> node7 -> node1;")
             .withSimpleNames()
             .xmlToDot("graph.xml")
             .print()
